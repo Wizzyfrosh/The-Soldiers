@@ -130,10 +130,8 @@ export const Home: React.FC<HomeProps> = ({
         </div>
       </section>
 
-      {/* SECTION 5: "FIND YOUR PLACE. SERVE WITH PURPOSE." (MINISTRY GRID - LIQUID GLASS) */}
-      <section className="py-24 bg-gradient-to-b from-[#0A1D37] via-[#071324] to-[#0A1D37] relative overflow-hidden text-white">
-        {/* Ambient glow */}
-        <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      {/* SECTION 5: "FIND YOUR PLACE. SERVE WITH PURPOSE." (MINISTRY GRID - WARM LIQUID GLASS) */}
+      <section className="py-24 bg-[#EFEFEF] relative overflow-hidden">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
           
@@ -149,15 +147,15 @@ export const Home: React.FC<HomeProps> = ({
             {ministries.map((min, idx) => (
               <StaggerItem key={idx}>
                 <div
-                  className="group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/15 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:border-gold-400 flex flex-col justify-between h-full"
+                  className="group relative rounded-2xl overflow-hidden bg-white/50 backdrop-blur-md border border-white/70 shadow-sm hover:bg-white/70 hover:shadow-md transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between h-full"
                 >
                   <div className="h-60 overflow-hidden relative">
                     <img
                       src={min.img}
                       alt={min.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-85"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                   </div>
 
                   <div className="p-6 relative z-10 -mt-16 space-y-2">
@@ -299,106 +297,93 @@ export const Home: React.FC<HomeProps> = ({
         </div>
       </section>
 
-      {/* SECTION 8: LOCATION & SERVICE TIMES (LIQUID GLASS UI) */}
-      <section className="py-24 relative overflow-hidden text-white bg-[#071324]">
-        {/* Subtle background image texture with dark navy overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/worship_hero.jpg"
-            alt="Sanctuary background"
-            className="w-full h-full object-cover object-center opacity-15"
-          />
-          <div className="absolute inset-0 bg-[#0A1D37]/90 backdrop-blur-sm"></div>
-        </div>
-
-        {/* Ambient lighting */}
-        <div className="absolute top-1/4 left-10 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-slate-800/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+      {/* SECTION 8: LOCATION & SERVICE TIMES (WARM LIQUID GLASS) */}
+      <section className="py-24 bg-[#F9F8F6] relative overflow-hidden">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
           
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="inline-block px-3.5 py-1 text-[11px] font-black uppercase tracking-widest bg-navy-900 border border-gold-500/40 text-gold-400 rounded-full">
+            <span className="inline-block px-3.5 py-1 text-[11px] font-black uppercase tracking-widest bg-gold-500/20 text-gold-600 rounded-full border border-gold-500/30">
               SANCTUARY LOCATION & SERVICE HOURS
             </span>
-            <h2 className="text-3xl md:text-5xl font-black uppercase font-display text-white">
+            <h2 className="text-3xl md:text-5xl font-black uppercase font-display text-[#1A1A1A]">
               Worship With Us
             </h2>
-            <p className="text-slate-300 text-sm max-w-xl mx-auto">
+            <p className="text-slate-600 text-sm max-w-xl mx-auto">
               Step into God's presence, experience authentic fellowship, and encounter the supernatural power of the Holy Spirit.
             </p>
           </div>
 
-          {/* Liquid Glass Container */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10">
+          {/* Warm Liquid Glass Container */}
+          <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               
-              {/* Interactive High-End Liquid Glass Map Embed */}
+              {/* Map Embed */}
               <FadeIn direction="left" className="lg:col-span-7">
-                <div className="h-[380px] sm:h-[420px] rounded-2xl overflow-hidden border border-white/20 shadow-2xl relative group">
+                <div className="h-[380px] sm:h-[420px] rounded-2xl overflow-hidden border border-white/40 shadow-xl relative group">
                   <iframe
                     title="Church Location Map"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104928.34791350478!2d-92.38573199999999!3d34.7464809!2m3!1f0!0f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87d2a138084a7e93%3A0x6b5a38ef2f9a120!2sLittle%20Rock%2C%20AR!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
-                    className="w-full h-full border-0 filter grayscale contrast-125 brightness-90 group-hover:brightness-95 transition-all"
+                    className="w-full h-full border-0 group-hover:brightness-105 transition-all"
                     loading="lazy"
                   ></iframe>
 
-                  {/* Floating Liquid Glass Badge */}
-                  <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-black/60 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-white shadow-xl">
-                    <div className="flex items-center gap-2 text-gold-400 text-xs font-black uppercase tracking-wider mb-0.5">
-                      <MapPin className="w-4 h-4 text-gold-400" />
+                  {/* Floating Glass Badge */}
+                  <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-white/70 backdrop-blur-md border border-white/60 p-4 rounded-2xl text-[#1A1A1A] shadow-lg">
+                    <div className="flex items-center gap-2 text-gold-600 text-xs font-black uppercase tracking-wider mb-0.5">
+                      <MapPin className="w-4 h-4 text-gold-500" />
                       <span>Soldiers of Jesus Christ Sanctuary</span>
                     </div>
-                    <p className="text-xs text-slate-200">1709 John Barrow Rd, Little Rock, AR 72204</p>
+                    <p className="text-xs text-slate-600">1709 John Barrow Rd, Little Rock, AR 72204</p>
                   </div>
                 </div>
               </FadeIn>
 
-              {/* Service Details in Liquid Glass Cards */}
+              {/* Service Details in Warm Glass Cards */}
               <FadeIn direction="right" delay={0.2} className="lg:col-span-5">
                 <div className="space-y-4">
                   
                   {/* Saturday 7th Day Sabbath Worship */}
-                  <div className="bg-white/10 backdrop-blur-md border border-gold-500/40 p-5 rounded-2xl space-y-1.5 hover:border-gold-400 transition-colors shadow-lg">
+                  <div className="bg-white/50 backdrop-blur-md border border-gold-500/30 p-5 rounded-2xl space-y-1.5 hover:bg-white/70 hover:border-gold-400 transition-all shadow-sm hover:shadow-md">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-gold-400 px-2 py-0.5 rounded bg-gold-500/10 border border-gold-500/20">
+                      <span className="text-[11px] font-black uppercase tracking-wider text-gold-600 px-2 py-0.5 rounded bg-gold-500/10 border border-gold-500/20">
                         7th Day — The Sabbath
                       </span>
-                      <span className="text-xs font-bold text-gold-300">Saturdays</span>
+                      <span className="text-xs font-bold text-gold-600">Saturdays</span>
                     </div>
-                    <h4 className="font-extrabold text-base text-white uppercase font-display">
+                    <h4 className="font-extrabold text-base text-[#1A1A1A] uppercase font-display">
                       Sabbath Miracle & Holy Worship Service
                     </h4>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       Holy Ghost Power, Miracle Services, and Holy Worship. "Thou shall keep the Sabbath day holy. We always stand by the Truth!"
                     </p>
                   </div>
 
                   {/* Sunday Activities */}
-                  <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl space-y-1.5 hover:border-white/30 transition-colors shadow-lg">
+                  <div className="bg-white/50 backdrop-blur-md border border-white/70 p-5 rounded-2xl space-y-1.5 hover:bg-white/70 transition-all shadow-sm hover:shadow-md">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-slate-300 px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                      <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 px-2 py-0.5 rounded bg-slate-100 border border-slate-200">
                         Sunday Schedule
                       </span>
-                      <span className="text-xs font-bold text-slate-300">Sundays</span>
+                      <span className="text-xs font-bold text-slate-500">Sundays</span>
                     </div>
-                    <h4 className="font-extrabold text-base text-white uppercase font-display">
+                    <h4 className="font-extrabold text-base text-[#1A1A1A] uppercase font-display">
                       Services & Activities
                     </h4>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       Sunday services and ministry fellowship activities are as advertised.
                     </p>
                   </div>
 
                   {/* Midweek Prayer */}
-                  <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl space-y-1.5 hover:border-white/30 transition-colors shadow-lg">
+                  <div className="bg-white/50 backdrop-blur-md border border-white/70 p-5 rounded-2xl space-y-1.5 hover:bg-white/70 transition-all shadow-sm hover:shadow-md">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black uppercase tracking-wider text-slate-300 px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                      <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 px-2 py-0.5 rounded bg-slate-100 border border-slate-200">
                         Midweek Prayer Watch
                       </span>
-                      <span className="text-xs font-bold text-slate-300">Wednesdays @ 7:00 PM</span>
+                      <span className="text-xs font-bold text-slate-500">Wednesdays @ 7:00 PM</span>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed">
                       Corporate intercessory prayer and deep verse-by-verse scripture study.
                     </p>
                   </div>
@@ -413,7 +398,7 @@ export const Home: React.FC<HomeProps> = ({
                     >
                       <MapPin className="w-4 h-4" /> Get Directions
                     </a>
-                    <Button variant="outline" size="md" onClick={onOpenPlanVisitModal}>
+                    <Button variant="navy" size="md" onClick={onOpenPlanVisitModal}>
                       Plan Your Visit
                     </Button>
                   </div>

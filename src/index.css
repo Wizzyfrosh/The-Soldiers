@@ -48,6 +48,29 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
   }
 
+  .glass-warm {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 1.5rem;
+  }
+
+  .glass-warm-card {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+  }
+
+  .glass-warm-card:hover {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.08);
+  }
+
   .liquid-glass {
     background: rgba(3, 11, 23, 0.55);
     backdrop-filter: blur(20px) saturate(180%);
