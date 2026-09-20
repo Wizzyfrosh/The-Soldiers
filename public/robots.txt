@@ -1,0 +1,12 @@
+# Soldiers of Jesus Christ Church Website
+# https://www.soldiersofjesuschrist.org
+
+User-agent: *
+Allow: /
+
+# Block admin panel and API routes from all crawlers
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://www.soldiersofjesuschrist.org/sitemap.xml

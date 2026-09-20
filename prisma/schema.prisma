@@ -1,0 +1,134 @@
+// Prisma Schema for Soldiers of Jesus Christ Church Website & Admin Hub
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  EDITOR
+  VIEWER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String   // Hashed password
+  role      Role     @default(EDITOR)
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum EventCategory {
+  Worship
+  Youth
+  Community
+  Men
+  Women
+  Conference
+}
+
+model Event {
+  id                   String              @id @default(cuid())
+  title                String
+  description          String              @db.Text
+  date                 String
+  time                 String
+  location             String
+  image                String
+  category             EventCategory       @default(Worship)
+  registrationRequired Boolean             @default(true)
+  capacity             Int?                @default(300)
+  registrationsCount   Int                 @default(0)
+  registrations        EventRegistration[]
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+}
+
+model EventRegistration {
+  id           String   @id @default(cuid())
+  eventId      String
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name         String
+  email        String
+  phone        String?
+  guestsCount  Int      @default(1)
+  registeredAt DateTime @default(now())
+}
+
+model Sermon {
+  id          String   @id @default(cuid())
+  title       String
+  youtubeId   String
+  speaker     String
+  series      String
+  date        String
+  featured    Boolean  @default(false)
+  description String   @db.Text
+  scripture   String?
+  createdAt   DateTime @default(now())
+}
+
+enum SubmissionType {
+  PRAYER_REQUEST
+  CONTACT
+  PLAN_VISIT
+  NEW_MEMBER
+}
+
+model FormSubmission {
+  id        String         @id @default(cuid())
+  type      SubmissionType
+  name      String
+  email     String
+  phone     String?
+  message   String         @db.Text
+  isRead    Boolean        @default(false)
+  isPrivate Boolean        @default(false)
+  createdAt DateTime       @default(now())
+}
+
+enum Frequency {
+  ONE_TIME
+  MONTHLY
+}
+
+enum DonationStatus {
+  Completed
+  Processing
+  Failed
+}
+
+model Donation {
+  id        String         @id @default(cuid())
+  donorName String
+  email     String
+  amount    Float
+  frequency Frequency      @default(ONE_TIME)
+  fund      String         @default("General Fund")
+  status    DonationStatus @default(Completed)
+  stripeTxId String?
+  createdAt DateTime       @default(now())
+}
+
+model SiteContent {
+  id                 String   @id @default("singleton")
+  heroTitle          String
+  heroSubheadline    String
+  tickerMessage      String
+  seasonalTitle      String
+  seasonalSubheadline String
+  seasonalBody       String   @db.Text
+  sundayServiceTime  String
+  address            String
+  phone              String
+  email              String
+  updatedAt          DateTime @updatedAt
+}

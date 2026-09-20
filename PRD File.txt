@@ -1,0 +1,291 @@
+PRODUCT REQUIREMENTS DOCUMENT (PRD)
+Project Name: Soldiers of Jesus Christ – Church Website Redesign
+Document Version: 1.0
+Design Reference: Navy Blue, Gold/Yellow, White (Modern, Bold, Community-Focused)
+ 
+1. Executive Summary
+Project Goal: To build a high-performance, custom-coded website for "Soldiers of Jesus Christ" that serves as a digital home for the congregation, a powerful evangelism tool for newcomers, and a streamlined administrative hub for church leadership.
+Target Audience: Local community members seeking a church home, current members seeking community and resources, and online viewers seeking spiritual content.
+Core Mission: "Equipping the Saints for the Battle. Standing Firm in Faith."
+ 
+2. Visual Identity & "The Vibe"
+Based on the provided design reference, the website will break away from traditional, outdated church designs and adopt a modern, high-converting aesthetic.
+•	Color Palette:
+o	Primary: Deep Navy Blue (#0A1D37) – Represents authority, stability, and the uniform of a soldier.
+o	Secondary: Gold/Yellow (#F5A623) – Represents victory, royalty, and the glory of God.
+o	Neutral: Crisp White (#FFFFFF) and Light Gray (#F4F4F4) – For clean backgrounds and readability.
+•	Typography:
+o	Headings: Bold, commanding sans-serif (e.g., Montserrat, Oswald, or Inter). Use uppercase for emphasis.
+o	Body: Clean, highly legible sans-serif (e.g., Open Sans or Roboto).
+•	Imagery: Authentic, high-resolution photos of the congregation, worship sessions, and community outreach. Avoid generic stock photos. Images should be slightly darkened with overlays to ensure white text pops.
+•	UI Elements: Sharp, modern cards with subtle drop shadows. Gold buttons with hover effects (e.g., slight scale-up or darkening).
+ 
+3. Recommended Tech Stack (Custom Code)
+Since you are coding this from scratch, here is the best modern stack for scalability, SEO, and speed:
+•	Frontend Framework: Next.js (React) – Provides Server-Side Rendering (SSR) for excellent SEO, fast page loads, and dynamic routing.
+•	Styling: Tailwind CSS – Perfect for implementing the card grids, responsive layouts, and custom color palette efficiently.
+•	Backend: Node.js with Express OR Next.js API Routes (Serverless functions).
+•	Database: PostgreSQL (via Prisma ORM) – Robust for managing events, sermon metadata, and member data.
+•	Headless CMS: Sanity.io or Strapi – Allows church staff to update sermons, events, and team bios without touching the code.
+•	Authentication (Optional): NextAuth.js – For a member portal or volunteer login.
+•	Hosting: Vercel (Frontend/API) + Render (Database).
+ 
+4. System Architecture
+•	Client Layer: Web Browser (Desktop/Mobile), Mobile App (future).
+•	Frontend Layer: Next.js App Router, Tailwind CSS, React Components.
+•	API Layer: Next.js API routes handling requests for Giving (Stripe), YouTube (Data API v3), Forms (SendGrid/Mailchimp), and Events.
+•	Database Layer: PostgreSQL storing Events, Sermon Metadata, User Profiles, and Form Submissions.
+•	External Integrations:
+o	Stripe/PayPal: For secure online giving.
+o	YouTube Data API v3: Automatically pulls the latest sermons.
+o	Google Maps API: For location and directions.
+ 
+5. Page Architecture & Detailed Wireframes (20 Pages)
+The 20-Page Structure:
+1.	Home
+2.	About Us
+3.	Meet the Pastor
+4.	Our Beliefs
+5.	Ministries (Overview)
+6.	Men's Ministry (The Mighty Men)
+7.	Women's Ministry (Women of Valor)
+8.	Youth & Teens
+9.	Children's Ministry
+10.	Outreach & Missions
+11.	Sermons (Watch)
+12.	Events
+13.	Event Registration (Dynamic Page)
+14.	Give
+15.	Contact
+16.	Prayer Request
+17.	Plan Your Visit
+18.	Privacy Policy
+19.	Terms of Service
+20.	404 Error Page
+Detailed Homepage Wireframe (Mapping to your Image):
+•	Section 1: Sticky Header
+o	Left: Logo ("Soldiers of Jesus Christ")
+o	Center: Nav Links (About, Ministries, Sermons, Events, Give)
+o	Right: Gold CTA Button ("Plan Your Visit")
+•	Section 2: Hero Section (Full Width)
+o	Background: Darkened image of a congregation raising hands or a powerful worship moment.
+o	Text (Center, White & Gold): "WELCOME TO SOLDIERS OF JESUS CHRIST. A Church You Can Call Home. A Cause You Can Die For."
+o	Subtext: "Join us for Sunday Worship at 10:00 AM."
+o	CTA: [Plan Your Visit] [Watch Latest Sermon]
+•	Section 3: Welcome/About Brief
+o	Two-column layout. Left: Image of Pastor/Worship. Right: Text welcoming newcomers, explaining the mission.
+•	Section 4: "Find Your Place. Serve with Purpose." (Ministry Grid)
+o	Light Gray Background.
+o	Grid of 6 cards (3x2). Each card has an image, title (Men, Women, Youth, Children, Outreach, Worship), and a "Learn More" button.
+•	Section 5: Featured Seasonal Block (Yellow Background - Like the "Summer" section in the image)
+o	Left: Collage of images. Right: Text about a current sermon series or church-wide fast.
+o	CTA: "Watch Latest Sermon" or "Get Involved".
+•	Section 6: Upcoming Events & Registration
+o	Horizontal scrolling cards or a grid. Each card shows Date, Event Title, Location, and a "Register Now" button.
+•	Section 7: Location & Service Times (Dark Navy Background)
+o	Left: Google Map Embed. Right: Address, Service Times, Phone Number, "Get Directions" button.
+•	Section 8: Footer
+o	Links, Social Media Icons, Newsletter Signup, Contact Info.
+Key Interior Page Wireframes:
+•	Sermons Page: Filterable grid (by Series, Date, Speaker). Each card has a YouTube thumbnail, title, and "Watch Now" button.
+•	Give Page: Secure form with preset amounts, frequency toggle (One-time vs. Recurring), and custom amount input. Integrated with Stripe/PayPal.
+•	Events Page: Calendar view or list view. Clicking an event leads to a dynamic page (/events/[id]) with a registration form.
+ 
+6. Drafted Copywriting (Tailored for "Soldiers of Jesus Christ")
+Hero Section:
+•	Headline: "A Church You Can Call Home. A Cause You Can Die For."
+•	Subheadline: "Equipping the Saints for the Battle. Join us Sundays at 10:00 AM."
+•	CTA: [Enlist Today - Plan Your Visit]
+Ministry Section:
+•	Header: "Find Your Place. Serve with Purpose."
+•	Body: "Every soldier needs a battalion. Discover where you fit in the fight. From Men's and Women's ministries to Youth and Outreach, there is a place for you to grow, serve, and stand firm."
+About Us Page:
+•	Header: "Our Mission & Vision"
+•	Body: "Soldiers of Jesus Christ is a community of believers committed to putting on the whole armor of God (Ephesians 6:11). We are a church built on the foundation of Christ, equipped with the Word, and empowered by the Holy Spirit to advance the Kingdom in our city and beyond."
+Give Page:
+•	Header: "Partner with the Mission."
+•	Body: "Your generous giving fuels the work of the Kingdom. It supports our local outreach, global missions, and the daily operations of the church. Give securely online today."
+ 
+7. Essential Features Checklist (Implementation Plan)
+•	Giving Elements Add-On: Integrate Stripe Checkout or PayPal API. Create a custom React form that allows users to select a predefined amount or enter a custom amount, and choose between one-time or recurring (monthly) donations.
+•	Built-In Forms: Use React Hook Form + Zod for validation. Create forms for Contact, Prayer Requests, and "I'm New" connection cards. Use SendGrid or Nodemailer to route submissions to the church admin email.
+•	Events + Registration: Build a dynamic routing system (/events/[id]). Use the database to track RSVPs. Integrate Stripe for paid events (e.g., youth camp).
+•	YouTube Integration: Use the YouTube Data API v3 to fetch the latest 5-10 videos from the church's YouTube channel. Display them on the home page and a dedicated Sermons page. No manual video uploading required.
+•	SEO Setup: Implement Next.js Metadata API. Add OpenGraph tags for social sharing. Implement JSON-LD Schema for LocalBusiness/Church to help with local SEO.
+•	Mobile-Friendly: Use Tailwind's mobile-first utility classes. Ensure all buttons are at least 44x44px for easy tapping. Test on iOS Safari and Android Chrome.
+ 
+8. Actionable Next Steps (Development Roadmap)
+1.	Discovery & Content Gathering: Collect logos, high-res images, mission statements, and pastor bios.
+2.	UI/UX Design: Create a Figma file. Map out the exact colors, typography, and component states (hover, active, disabled).
+3.	Project Setup: Initialize a Next.js project with TypeScript, Tailwind CSS, and Prisma.
+4.	Backend/Database Setup: Define your Prisma schema (Users, Events, Sermons, Donations). Set up your PostgreSQL database.
+5.	Frontend Development: Build reusable components (Header, Footer, Hero, Card, Button). Assemble the pages.
+6.	Integrations: Connect Stripe, YouTube API, and email services.
+7.	Testing & QA: Test the giving flow, form submissions, and mobile responsiveness.
+8.	Deployment: Push to GitHub, deploy the frontend to Vercel, and the database to Supabase/Neon.
+ 
+9. Master AI Prompt Strategy (How to build this with AI)
+use a "Chain of Thought" prompting strategy. Do not build the whole site at once.
+Master Prompt 1: Project Setup & Database Schema
+"Act as a senior Next.js 14 developer. I am building a church website for 'Soldiers of Jesus Christ'. Set up a new Next.js project using TypeScript, Tailwind CSS, and Prisma ORM with PostgreSQL. Create a comprehensive Prisma schema for: 1. Events (id, title, description, date, location, image, registrationRequired). 2. Sermons (id, title, youtubeId, date, speaker, series). 3. Donations (id, amount, frequency, status). 4. FormSubmissions (id, type, name, email, message). Provide the schema.prisma file and the setup commands."
+Master Prompt 2: Building the Homepage Hero Section
+"Using the Next.js and Tailwind setup from before, create a responsive 'Hero' component for the Homepage. It should have a full-screen background image with a deep navy blue overlay (rgba(10, 29, 55, 0.8)). Centered white text with a bold, uppercase heading: 'WELCOME TO SOLDIERS OF JESUS CHRIST'. Below it, a gold subheading: 'A Church You Can Call Home. A Cause You Can Die For.' Include two buttons: a solid gold primary button 'Plan Your Visit' and a transparent white border secondary button 'Watch Latest Sermon'. Ensure it looks stunning on mobile and desktop."
+Master Prompt 3: Ministry Grid Component
+"Create a 'MinistryGrid' component using React and Tailwind. The section title is 'Find Your Place. Serve with Purpose.' It should display a 3x2 grid of cards on desktop and a single column on mobile. Each card should have a background image, a dark gradient overlay at the bottom, and the ministry name (Men's, Women's, Youth, Children's, Outreach, Worship) in bold white text. Add a 'Learn More' link that appears on hover."
+Master Prompt 4: YouTube API Integration
+"Write a Next.js serverless API route (/api/sermons) that fetches the latest 5 videos from a specific YouTube channel ID using the YouTube Data API v3. It should return an array of objects containing the videoId, title, thumbnailUrl, and publishedAt. Then, create a React component that fetches this API and displays the sermons in a horizontal scrollable carousel."
+Master Prompt 5: Stripe Giving Form
+"Create a secure donation form component in React using Tailwind. It should include: 1. A preset amount selector ($10, $25, $50, $100, Custom). 2. A frequency toggle (One-Time, Monthly). 3. A 'Give Now' button. Upon submission, it should make a POST request to a Next.js API route that creates a Stripe Checkout session and redirects the user to the Stripe payment page."
+ADMIN PANEL EXPANSION & ARCHITECTURE
+1. Admin System Architecture
+•	Route Structure: The admin panel will live on a separate route: https://yourdomain.com/admin.
+•	Security: This route must be protected by Middleware. If an unauthenticated user tries to access /admin, they are immediately redirected to a login page (/admin/login).
+•	Authentication: NextAuth.js. We will use a Credentials Provider (Email + Password) and optionally Google OAuth.
+•	Authorization (RBAC): Not all admins should have all power. We will implement Role-Based Access Control:
+o	SUPER_ADMIN: Full access (can manage users, delete records, view financials).
+o	EDITOR: Can manage sermons, events, and content, but cannot view giving reports or manage users.
+o	VIEWER: Can only view data (e.g., prayer requests) but cannot edit or delete.
+•	Server Actions: Use Next.js Server Actions to handle form submissions (creating events, adding sermons) securely on the server side, eliminating the need for excessive API routes.
+2. Core Admin Features & Workflows
+The admin panel will be split into 7 key modules:
+1.	Dashboard Overview:
+o	Quick stats: Total donations this month, upcoming events, unread prayer requests.
+o	Quick actions: "Add New Event", "Post Latest Sermon".
+2.	Sermon Manager:
+o	Form to add a new sermon: Title, Speaker, Series, Date, YouTube Video ID.
+o	Toggle to "Feature on Homepage".
+3.	Event Manager:
+o	Create, Edit, Delete events.
+o	View event registrations and export attendee lists to CSV.
+4.	Giving & Financials:
+o	View transaction history (synced via Stripe Webhooks).
+o	Filter by date, fund, or amount. Export reports.
+5.	Form Submissions (Inbox):
+o	A unified inbox for Contact Forms, Prayer Requests, and "I'm New" cards.
+o	Mark as "Read", "Replied", or "Archived".
+6.	Content Management (CMS):
+o	Edit the Homepage Hero text (Headline, Subheadline, CTA links).
+o	Edit the About Us and Beliefs pages without code.
+7.	User Management (Super Admin only):
+o	Invite new admins, change roles, revoke access.
+3. Admin UI/UX Design
+The admin panel should not mirror the public-facing site. It should be a functional, clean dashboard.
+•	Layout:
+o	Left Sidebar (Dark Navy Blue): Navigation links with icons. Sticky, fixed position.
+o	Top Header (White): Search bar, User Profile dropdown (Logout, Settings).
+o	Main Content Area (Light Gray): Contains data tables, forms, and cards.
+•	Components:
+o	Data Tables: Sortable, filterable, and paginated tables for events, donations, and submissions.
+o	Forms: Clean inputs with validation error messages. Use modals for quick edits instead of full page reloads.
+o	Buttons: Gold for primary actions (Save, Create), Red for destructive actions (Delete).
+4. Updated Database Schema (Prisma)
+We need to add models for users and update existing models to support admin workflows.
+prisma
+// Add to schema.prisma
+
+enum Role {
+  SUPER_ADMIN
+  EDITOR
+  VIEWER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String   // Hashed
+  role      Role     @default(EDITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  image       String
+  status      EventStatus @default(DRAFT)
+  registrations Registration[]
+}
+
+model Sermon {
+  id        String   @id @default(cuid())
+  title     String
+  youtubeId String
+  speaker   String
+  series    String?
+  date      DateTime
+  featured  Boolean  @default(false)
+}
+
+enum SubmissionType {
+  PRAYER_REQUEST
+  CONTACT
+  NEW_MEMBER
+}
+
+model FormSubmission {
+  id        String         @id @default(cuid())
+  type      SubmissionType
+  name      String
+  email     String
+  message   String
+  isRead    Boolean        @default(false)
+  createdAt DateTime       @default(now())
+}
+________________________________________
+5. Step-by-Step Development Plan (Admin Panel)
+1.	Authentication Setup: Install next-auth, @auth/prisma-adapter, and bcryptjs. Create the auth.ts configuration file. Set up the Credentials provider to check against the User table.
+2.	Middleware Protection: Create a middleware.ts file in the root of your Next.js project. Configure it to match /admin/:path* and redirect unauthenticated users to /admin/login.
+3.	Admin Layout: Build the app/(admin)/layout.tsx file. This will hold the fixed Sidebar and Top Header. It will check the user's role and conditionally render navigation links based on permissions.
+4.	Dashboard Page: Build app/(admin)/dashboard/page.tsx. Fetch summary data from the database (e.g., count of unread submissions, upcoming events).
+5.	CRUD Operations:
+o	Build the Sermon and Event tables.
+o	Create Server Actions for createEvent, updateEvent, deleteEvent.
+o	Connect the forms to these actions.
+6.	Stripe Webhook: Create an API route /api/webhooks/stripe to listen for successful payments and save the donation record to your database.
+7.	Testing: Log in as different roles to ensure an EDITOR cannot access the User Management page.
+________________________________________
+6. Master AI Prompts for Building the Admin Panel
+Copy and paste these prompts into your AI coding assistant (like Cursor, ChatGPT, or Claude) step-by-step.
+Prompt 1: Authentication & Middleware
+"Act as a senior Next.js 14 developer. I am adding an admin panel to my church website. I need to set up authentication using NextAuth.js v5 with a Credentials Provider (Email and Password) using Prisma as the adapter.
+1.	Provide the auth.ts configuration file.
+2.	Provide the middleware.ts file that protects all routes starting with /admin, redirecting unauthenticated users to /admin/login.
+3.	Provide the API route app/api/auth/[...nextauth]/route.ts.
+Ensure the code uses TypeScript and follows best security practices (e.g., hashing passwords with bcrypt)."
+Prompt 2: Admin Layout & Sidebar
+"Create a responsive Admin Layout for a Next.js 14 app using Tailwind CSS.
+The layout should have a fixed left sidebar (Navy Blue #0A1D37) and a top header (White).
+The sidebar should include navigation links with Lucide-react icons for: Dashboard, Sermons, Events, Giving, Inbox, Content, and Users (Users should only be visible if the user's role is SUPER_ADMIN).
+The main content area should have a light gray background (#F4F4F4). Provide the app/(admin)/layout.tsx and a Sidebar.tsx component."
+Prompt 3: Reusable Data Table
+"Create a reusable DataTable component in React using Tailwind CSS and @tanstack/react-table. It should accept columns and data as props. It needs to include sorting, pagination, and a search input. Use the Navy Blue and Gold color scheme for the header and action buttons. Provide the component code and an example of how to use it for a list of 'Events'."
+Prompt 4: Event Management (CRUD)
+"Create an Event Management page for the admin panel using Next.js 14 Server Actions and React Hook Form.
+1.	Create a Server Action createEvent that validates the input using Zod and saves it to the Prisma database.
+2.	Create the form component with fields: Title, Description, Date, Location, and Image URL.
+3.	Create a page that displays the DataTable of all events with an 'Add New Event' button that opens a modal containing the form."
+Prompt 5: Sermon Manager with YouTube
+"Build a Sermon Manager page. It should have a form to add a new sermon (Title, Speaker, Series, Date, YouTube Video ID).
+When a user enters a YouTube Video ID, automatically display the YouTube thumbnail preview using https://img.youtube.com/vi/[ID]/maxresdefault.jpg so the admin can verify it's the correct video before saving. Use a Next.js Server Action to save it to the database."
+Prompt 6: Form Submissions Inbox
+"Create an 'Inbox' page for the admin panel to view Form Submissions (Prayer Requests, Contact, New Members).
+Display them as a list on the left, and when clicked, show the full message on the right.
+Add a 'Mark as Read' button that triggers a Server Action to update the isRead boolean in the database. Filter the list to show unread messages first."
+Prompt 7: Role-Based Access Control (RBAC)
+"Implement Role-Based Access Control in my Next.js 14 admin panel.
+1.	Create a utility function hasPermission(userRole, requiredRole).
+2.	In the Admin Layout, use this function to hide the 'Giving' and 'Users' navigation links if the user's role is EDITOR or VIEWER.
+3.	In the Server Actions for deleting events, add a check to ensure only SUPER_ADMIN or EDITOR can execute the deletion."
+
+Master Prompt 6: SEO and Metadata
+"Generate the SEO metadata for the Homepage and About page using Next.js 14 Metadata API. Include title tags, meta descriptions, OpenGraph tags for social media sharing, and a JSON-LD script for a LocalBusiness (Church) schema to help with local search rankings in [Your City]."
