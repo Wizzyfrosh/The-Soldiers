@@ -131,7 +131,7 @@ export const Home: React.FC<HomeProps> = ({
       </section>
 
       {/* SECTION 5: "FIND YOUR PLACE. SERVE WITH PURPOSE." (MINISTRY GRID - LIQUID GLASS) */}
-      <section className="py-24 bg-navy-950 relative overflow-hidden text-white">
+      <section className="py-24 bg-gradient-to-b from-[#0A1D37] via-[#071324] to-[#0A1D37] relative overflow-hidden text-white">
         {/* Ambient glow */}
         <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -145,42 +145,39 @@ export const Home: React.FC<HomeProps> = ({
             />
           </FadeIn>
 
-          {/* Liquid Glass Main Wrapper Container */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl">
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {ministries.map((min, idx) => (
-                <StaggerItem key={idx}>
-                  <div
-                    className="group relative rounded-2xl overflow-hidden shadow-xl border border-white/20 bg-white/10 backdrop-blur-md text-white transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:border-gold-400 flex flex-col justify-between h-full"
-                  >
-                    <div className="h-60 overflow-hidden relative">
-                      <img
-                        src={min.img}
-                        alt={min.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-85"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                    </div>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ministries.map((min, idx) => (
+              <StaggerItem key={idx}>
+                <div
+                  className="group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/15 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:border-gold-400 flex flex-col justify-between h-full"
+                >
+                  <div className="h-60 overflow-hidden relative">
+                    <img
+                      src={min.img}
+                      alt={min.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-85"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                  </div>
 
-                    <div className="p-6 relative z-10 -mt-16 space-y-2">
-                      <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest block drop-shadow">{min.subtitle}</span>
-                      <h3 className="text-2xl font-black uppercase font-display text-white group-hover:text-gold-300 transition-colors drop-shadow-md">
-                        {min.name}
-                      </h3>
-                      
-                      <div className="pt-3">
-                        <Link to={min.path}>
-                          <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-gold-400 group-hover:text-gold-300">
-                            Explore Ministry <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </span>
-                        </Link>
-                      </div>
+                  <div className="p-6 relative z-10 -mt-16 space-y-2">
+                    <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest block drop-shadow">{min.subtitle}</span>
+                    <h3 className="text-2xl font-black uppercase font-display text-white group-hover:text-gold-300 transition-colors drop-shadow-md">
+                      {min.name}
+                    </h3>
+                    
+                    <div className="pt-3">
+                      <Link to={min.path}>
+                        <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-gold-400 group-hover:text-gold-300">
+                          Explore Ministry <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </Link>
                     </div>
                   </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
 
         </div>
       </section>
@@ -303,14 +300,24 @@ export const Home: React.FC<HomeProps> = ({
       </section>
 
       {/* SECTION 8: LOCATION & SERVICE TIMES (LIQUID GLASS UI) */}
-      <section className="py-24 bg-navy-950 text-white relative overflow-hidden">
-        {/* Background ambient lighting */}
-        <div className="absolute top-1/4 left-10 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-slate-800/20 rounded-full blur-3xl pointer-events-none"></div>
+      <section className="py-24 relative overflow-hidden text-white bg-[#071324]">
+        {/* Subtle background image texture with dark navy overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/worship_hero.jpg"
+            alt="Sanctuary background"
+            className="w-full h-full object-cover object-center opacity-15"
+          />
+          <div className="absolute inset-0 bg-[#0A1D37]/90 backdrop-blur-sm"></div>
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Ambient lighting */}
+        <div className="absolute top-1/4 left-10 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-slate-800/20 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
           
-          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
             <span className="inline-block px-3.5 py-1 text-[11px] font-black uppercase tracking-widest bg-navy-900 border border-gold-500/40 text-gold-400 rounded-full">
               SANCTUARY LOCATION & SERVICE HOURS
             </span>
@@ -322,7 +329,8 @@ export const Home: React.FC<HomeProps> = ({
             </p>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-2xl">
+          {/* Liquid Glass Container */}
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl shadow-lg p-6 sm:p-8 lg:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               
               {/* Interactive High-End Liquid Glass Map Embed */}
