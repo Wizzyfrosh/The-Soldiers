@@ -31,12 +31,16 @@ export const EventRegistrationModal: React.FC<EventRegistrationModalProps> = ({
     if (!name || !email) return;
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      store.registerForEvent(event.id);
-      setIsSubmitting(false);
-      setConfirmed(true);
-      onSuccess(`RSVP Confirmed for ${event.title}!`);
-    }, 1000);
+    store.registerForEvent(event.id, { name, email, phone, guestsCount })
+      .then(() => {
+        setIsSubmitting(false);
+        setConfirmed(true);
+        onSuccess(`RSVP Confirmed for ${event.title}!`);
+      })
+      .catch((err) => {
+        setIsSubmitting(false);
+        alert(err.message || 'Failed to complete registration.');
+      });
   };
 
   const handleClose = () => {

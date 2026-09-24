@@ -25,13 +25,15 @@ export interface FormSubmission {
 export interface Sermon {
   id: string;
   title: string;
-  youtubeId: string;
+  youtubeId?: string | null;
+  videoUrl?: string | null;
+  thumbnail?: string | null;
   speaker: string;
   series: string;
   date: string;
   featured: boolean;
   description: string;
-  scripture?: string;
+  scripture?: string | null;
 }
 
 export interface EventRegistration {
@@ -52,7 +54,7 @@ export interface ChurchEvent {
   date: string;
   time: string;
   location: string;
-  image: string;
+  image?: string | null;
   category: 'Worship' | 'Youth' | 'Community' | 'Men' | 'Women' | 'Conference';
   registrationRequired: boolean;
   capacity?: number;
@@ -81,4 +83,46 @@ export interface SiteContent {
   address: string;
   phone: string;
   email: string;
+}
+
+export interface Ministry {
+  id: string;
+  name: string;
+  subtitle: string;
+  icon: string;
+  path: string;
+}
+
+export interface Testimony {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  // Backwards compatibility helpers
+  name?: string;
+  quote?: string;
+  role?: string;
+  avatarUrl?: string;
+}
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  // Backwards compatibility helpers
+  excerpt?: string;
+  date?: string;
+  slug?: string;
+}
+
+export interface CountdownEvent {
+  id: string;
+  title: string;
+  location: string;
+  date: string;
+  ctaLabel?: string;
+  ctaLink?: string;
 }

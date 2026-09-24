@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Play, Search, Filter } from 'lucide-react';
 import { store } from '../data/store';
 import { Sermon } from '../types';
@@ -9,12 +9,34 @@ interface SermonsProps {
   onSelectSermon: (sermon: Sermon) => void;
 }
 
+const getSermonThumbnail = (sermon: Sermon): string => {
+  if (sermon.thumbnail) return sermon.thumbnail;
+  if (sermon.youtubeId) return `https://img.youtube.com/vi/${sermon.youtubeId}/hqdefault.jpg`;
+  return '/images/worship_hero.jpg'; // fallback for uploaded video sermons
+};
+
+const getSermonHeroThumbnail = (sermon: Sermon): string => {
+  if (sermon.thumbnail) return sermon.thumbnail;
+  if (sermon.youtubeId) return `https://img.youtube.com/vi/${sermon.youtubeId}/maxresdefault.jpg`;
+  return '/images/worship_hero.jpg';
+};
+
 export const Sermons: React.FC<SermonsProps> = ({ onSelectSermon }) => {
-  const [sermons] = useState<Sermon[]>(store.getSermons());
+  const [sermons, setSermons] = useState<Sermon[]>(store.getSermons());
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSeries, setSelectedSeries] = useState('All');
 
+  // Subscribe to store for real-time updates and sync with backend
+  useEffect(() => {
+    store.syncWithBackend();
+    const unsubscribe = store.subscribe(() => {
+      setSermons(store.getSermons());
+    });
+    return unsubscribe;
+  }, []);
+
   const seriesList = ['All', ...Array.from(new Set(sermons.map(s => s.series)))];
+
 
   const filteredSermons = sermons.filter(s => {
     const matchesSearch = s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -47,7 +69,7 @@ export const Sermons: React.FC<SermonsProps> = ({ onSelectSermon }) => {
             <div className="lg:col-span-7 relative group cursor-pointer" onClick={() => onSelectSermon(sermons[0])}>
               <div className="relative aspect-video rounded-xl overflow-hidden border border-navy-700">
                 <img
-                  src={`https://img.youtube.com/vi/${sermons[0].youtubeId}/maxresdefault.jpg`}
+                  src={getSermonHeroThumbnail(sermons[0])}
                   alt={sermons[0].title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -124,7 +146,7 @@ export const Sermons: React.FC<SermonsProps> = ({ onSelectSermon }) => {
               <div>
                 <div className="relative aspect-video overflow-hidden">
                   <img
-                    src={`https://img.youtube.com/vi/${sermon.youtubeId}/hqdefault.jpg`}
+                    src={getSermonThumbnail(sermon)}
                     alt={sermon.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

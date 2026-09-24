@@ -25,15 +25,14 @@ export const GivingModal: React.FC<GivingModalProps> = ({ isOpen, onClose, onSuc
 
   const finalAmount = amount === 'custom' ? parseFloat(customAmount) || 0 : (typeof amount === 'number' ? amount : 0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!finalAmount || finalAmount <= 0) return;
     if (!donorName || !email) return;
 
     setIsProcessing(true);
-
-    setTimeout(() => {
-      const donation = store.addDonation({
+    try {
+      const donation = await store.addDonation({
         donorName,
         email,
         amount: finalAmount,
@@ -44,7 +43,10 @@ export const GivingModal: React.FC<GivingModalProps> = ({ isOpen, onClose, onSuc
       setIsProcessing(false);
       setCompletedTx(donation);
       onSuccess(`Thank you for your generous gift of $${finalAmount.toFixed(2)} to ${fund}!`);
-    }, 1500);
+    } catch (err: any) {
+      setIsProcessing(false);
+      alert(err.message || 'Failed to process donation');
+    }
   };
 
   const handleResetAndClose = () => {

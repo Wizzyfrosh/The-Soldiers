@@ -14,10 +14,13 @@ import {
   Shield,
   UserCheck,
   Search,
-  Bell
+  Bell,
+  Newspaper,
+  MessageSquareQuote
 } from 'lucide-react';
-import { store, MOCK_USERS } from '../../data/store';
-import { Role } from '../../types';
+import { Role, User } from '../../types';
+import { store } from '../../data/store';
+import { api } from '../../services/api';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -26,10 +29,22 @@ interface AdminLayoutProps {
 export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const currentUser = store.getCurrentUser();
+  const [currentUser, setCurrentUser] = useState<User | null>(store.getCurrentUser());
+
+  React.useEffect(() => {
+    return store.subscribe(() => {
+      setCurrentUser(store.getCurrentUser());
+    });
+  }, []);
+
+  // Auth guard: redirect to login if not authenticated
+  if (!currentUser || !store.isAuthenticated()) {
+    return <Navigate to="/admin/login" replace />;
+  }
 
   const handleLogout = () => {
-    navigate('/');
+    store.logout();
+    navigate('/admin/login');
   };
 
   const menuItems = [
@@ -39,6 +54,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { name: 'Giving Ledger', path: '/admin/giving', icon: <Heart className="w-5 h-5" />, roles: ['SUPER_ADMIN'] },
     { name: 'Inbox (Forms)', path: '/admin/inbox', icon: <Inbox className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR', 'VIEWER'] },
     { name: 'CMS Content', path: '/admin/content', icon: <FileText className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR'] },
+    { name: 'Latest News', path: '/admin/news', icon: <Newspaper className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR'] },
+    { name: 'Testimonies', path: '/admin/testimonies', icon: <MessageSquareQuote className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR'] },
     { name: 'User Access', path: '/admin/users', icon: <Users className="w-5 h-5" />, roles: ['SUPER_ADMIN'] }
   ];
 

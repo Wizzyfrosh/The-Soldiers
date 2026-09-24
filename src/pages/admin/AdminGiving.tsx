@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Heart, Download, DollarSign, Filter } from 'lucide-react';
 import { store } from '../../data/store';
 import { Donation } from '../../types';
 
 export const AdminGiving: React.FC = () => {
-  const [donations] = useState<Donation[]>(store.getDonations());
+  const [donations, setDonations] = useState<Donation[]>(store.getDonations());
+
+  useEffect(() => {
+    store.syncWithBackend();
+    return store.subscribe(() => {
+      setDonations(store.getDonations());
+    });
+  }, []);
 
   const totalAmount = donations.reduce((sum, d) => sum + d.amount, 0);
 

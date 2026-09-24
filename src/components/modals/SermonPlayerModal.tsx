@@ -30,13 +30,28 @@ export const SermonPlayerModal: React.FC<SermonPlayerModalProps> = ({ sermon, is
 
         {/* Video Embed */}
         <div className="relative aspect-video w-full bg-black">
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${sermon.youtubeId}?autoplay=1`}
-            title={sermon.title}
-            className="w-full h-full border-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+          {sermon.youtubeId ? (
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${sermon.youtubeId}?autoplay=1`}
+              title={sermon.title}
+              className="w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          ) : sermon.videoUrl ? (
+            <video
+              src={sermon.videoUrl}
+              controls
+              autoPlay
+              className="w-full h-full object-contain"
+            >
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-slate-400">
+              <p className="text-sm">No video available for this sermon.</p>
+            </div>
+          )}
         </div>
 
         {/* Details Footer */}

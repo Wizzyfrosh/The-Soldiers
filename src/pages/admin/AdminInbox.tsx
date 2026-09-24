@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Inbox, CheckCircle, Mail, Phone, Calendar, User, Eye, EyeOff } from 'lucide-react';
 import { store } from '../../data/store';
 import { FormSubmission } from '../../types';
@@ -7,6 +7,17 @@ import { Button } from '../../components/common/Button';
 export const AdminInbox: React.FC = () => {
   const [submissions, setSubmissions] = useState<FormSubmission[]>(store.getSubmissions());
   const [selectedSub, setSelectedSub] = useState<FormSubmission | null>(submissions[0] || null);
+
+  useEffect(() => {
+    store.syncWithBackend();
+    return store.subscribe(() => {
+      const updated = store.getSubmissions();
+      setSubmissions(updated);
+      if (!selectedSub && updated.length > 0) {
+        setSelectedSub(updated[0]);
+      }
+    });
+  }, []);
 
   const handleToggleRead = (id: string) => {
     store.toggleReadSubmission(id);

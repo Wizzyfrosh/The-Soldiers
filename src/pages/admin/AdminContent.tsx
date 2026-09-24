@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Save, CheckCircle2 } from 'lucide-react';
 import { store } from '../../data/store';
 import { SiteContent } from '../../types';
@@ -7,6 +7,13 @@ import { Button } from '../../components/common/Button';
 export const AdminContent: React.FC = () => {
   const [content, setContent] = useState<SiteContent>(store.getSiteContent());
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    store.syncWithBackend();
+    return store.subscribe(() => {
+      setContent(store.getSiteContent());
+    });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

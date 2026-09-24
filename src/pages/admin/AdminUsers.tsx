@@ -1,31 +1,66 @@
-import React, { useState } from 'react';
-import { Users, UserPlus, Shield, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, UserPlus, Shield, CheckCircle2, Trash2 } from 'lucide-react';
 import { MOCK_USERS } from '../../data/store';
 import { User, Role } from '../../types';
 import { Button } from '../../components/common/Button';
+import { api } from '../../services/api';
 
 export const AdminUsers: React.FC = () => {
   const [usersList, setUsersList] = useState<User[]>(MOCK_USERS);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('tempPass123!');
   const [role, setRole] = useState<Role>('EDITOR');
+  const [loading, setLoading] = useState(false);
 
-  const handleInvite = (e: React.FormEvent) => {
+  const fetchUsers = async () => {
+    try {
+      const res = await api.users.getAll();
+      if (res.users) {
+        setUsersList(res.users);
+      }
+    } catch (err) {
+      console.warn('Failed to load users from backend:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email) return;
+    setLoading(true);
 
-    const newUser: User = {
-      id: `u-${Date.now()}`,
-      name,
-      email,
-      role
-    };
+    try {
+      await api.users.create({
+        name,
+        email,
+        password: password || 'Soldiers2026!',
+        role
+      });
+      await fetchUsers();
+      setShowInviteModal(false);
+      setName('');
+      setEmail('');
+      setPassword('tempPass123!');
+    } catch (err: any) {
+      alert(err.message || 'Failed to create user');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    setUsersList([...usersList, newUser]);
-    setShowInviteModal(false);
-    setName('');
-    setEmail('');
+  const handleDelete = async (id: string, userName: string) => {
+    if (!confirm(`Are you sure you want to revoke access for ${userName}?`)) return;
+    try {
+      await api.users.delete(id);
+      await fetchUsers();
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete user');
+    }
   };
 
   return (
@@ -50,6 +85,7 @@ export const AdminUsers: React.FC = () => {
               <th className="p-4">Email</th>
               <th className="p-4">Role Badge</th>
               <th className="p-4">Permissions Scope</th>
+              <th className="p-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 text-slate-700">
@@ -72,6 +108,17 @@ export const AdminUsers: React.FC = () => {
                   {u.role === 'SUPER_ADMIN' && 'Full Access (Financials, Users, Content, Events, Sermons)'}
                   {u.role === 'EDITOR' && 'Manage Sermons, Events, and CMS Content'}
                   {u.role === 'VIEWER' && 'Read-Only Access to Inbox & Analytics'}
+                </td>
+                <td className="p-4 text-right">
+                  {u.role !== 'SUPER_ADMIN' && (
+                    <button
+                      onClick={() => handleDelete(u.id, u.name)}
+                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Revoke access"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

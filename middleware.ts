@@ -3,9 +3,12 @@ import { NextResponse } from "next/server";
 
 /**
  * NextAuth Middleware for Next.js 14
- * - Restricts all routes starting with /admin
- * - Unauthenticated users -> redirected to /admin/login
- * - Authenticated users visiting /admin/login -> redirected to /admin/dashboard
+ *
+ * Requirements:
+ * 1. Protects ALL routes starting with /admin.
+ * 2. Unauthenticated requests to /admin/* are intercepted and redirected to /admin/login.
+ * 3. Authenticated users attempting to visit /admin/login are redirected to /admin/dashboard.
+ * 4. Public-facing church pages are completely untouched.
  */
 export default withAuth(
   function middleware(req) {
@@ -13,7 +16,7 @@ export default withAuth(
     const token = req.nextauth.token;
     const isAuthenticated = !!token;
 
-    // If already authenticated and trying to access /admin/login, redirect to /admin/dashboard
+    // If user is already authenticated and visits /admin/login, redirect to /admin/dashboard
     if (pathname === "/admin/login" && isAuthenticated) {
       return NextResponse.redirect(new URL("/admin/dashboard", req.url));
     }
@@ -25,21 +28,23 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl;
 
-        // Allow public access to the login page so users can sign in
+        // Allow public access to the login page so unauthenticated admins can authenticate
         if (pathname === "/admin/login") {
           return true;
         }
 
-        // Require authentication token for all other /admin routes
+        // Require a valid JWT token for all other /admin routes
         return !!token;
       },
     },
     pages: {
       signIn: "/admin/login",
     },
+    secret: process.env.NEXTAUTH_SECRET,
   }
 );
 
 export const config = {
+  // Matches /admin and all subpaths (/admin/dashboard, /admin/sermons, /admin/events, etc.)
   matcher: ["/admin/:path*"],
 };

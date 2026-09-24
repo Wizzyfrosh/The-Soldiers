@@ -1,4 +1,4 @@
-import { ChurchEvent, Donation, FormSubmission, Sermon, SiteContent, User } from '../types';
+import { ChurchEvent, Donation, FormSubmission, Sermon, SiteContent, User, NewsItem, Testimony } from '../types';
 
 export const INITIAL_SERMONS: Sermon[] = [
   {
@@ -47,60 +47,7 @@ export const INITIAL_SERMONS: Sermon[] = [
   }
 ];
 
-export const INITIAL_EVENTS: ChurchEvent[] = [
-  {
-    id: 'event-1',
-    title: 'Summer Strong Night of Worship & Prophetic Fire',
-    description: 'An explosive evening of immersive worship, personal prayer ministry, and powerful impartation for the whole family.',
-    date: '2026-09-27',
-    time: '6:30 PM - 9:00 PM',
-    location: 'Main Sanctuary',
-    image: '/images/worship_hero.jpg',
-    category: 'Worship',
-    registrationRequired: true,
-    capacity: 400,
-    registrationsCount: 184
-  },
-  {
-    id: 'event-2',
-    title: 'Mighty Men Annual Brotherhood BBQ & Range Day',
-    description: 'Fellowship, iron sharpening iron, powerful testimony from Guest Speaker Col. John Miller, and a steak dinner.',
-    date: '2026-10-03',
-    time: '9:00 AM - 2:00 PM',
-    location: 'Soldiers Fellowship Grounds',
-    image: '/images/mens.jpg',
-    category: 'Men',
-    registrationRequired: true,
-    capacity: 150,
-    registrationsCount: 92
-  },
-  {
-    id: 'event-3',
-    title: 'Women of Valor Fall Retreat: Crowned in Glory',
-    description: 'A 2-day spiritual retreat empowering women to step into their divine identity, healing, and Kingdom destiny.',
-    date: '2026-10-16',
-    time: '5:00 PM (Fri) - 4:00 PM (Sat)',
-    location: 'Mountain Pines Lodge',
-    image: '/images/womens.jpg',
-    category: 'Women',
-    registrationRequired: true,
-    capacity: 200,
-    registrationsCount: 145
-  },
-  {
-    id: 'event-4',
-    title: 'Youth & GenZ IGNITE Rally 2026',
-    description: 'High-octane worship, live DJ, games, free food, and a life-changing gospel message for middle & high schoolers.',
-    date: '2026-10-24',
-    time: '6:00 PM - 9:30 PM',
-    location: 'Student Ministry Center',
-    image: '/images/youth.jpg',
-    category: 'Youth',
-    registrationRequired: false,
-    capacity: 300,
-    registrationsCount: 210
-  }
-];
+export const INITIAL_EVENTS: ChurchEvent[] = [];
 
 export const INITIAL_SUBMISSIONS: FormSubmission[] = [
   {
@@ -194,6 +141,49 @@ export const INITIAL_SITE_CONTENT: SiteContent = {
   email: "info@soldiersofjesuschrist.org"
 };
 
+export const INITIAL_TESTIMONIES: Testimony[] = [
+  {
+    id: 'test-1',
+    title: '15 Years Of Smoking Ended In One Prayer',
+    content: 'For 15 long years, I was bound in chains to severe nicotine addiction. Cigarettes controlled my mornings, my nights, and my health. During the miracle and deliverance service, Pastor laid hands on my head and broke the yoke of addiction in Jesus name. Instantly the craving died! Today I am completely free, healthy, and singing the praises of our God!',
+    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600',
+    createdAt: '2026-10-01T10:00:00Z',
+    name: 'Bro. Emmanuel & Family'
+  },
+  {
+    id: 'test-2',
+    title: 'Suddenly, The Kidnapper Returned My Son',
+    content: 'My 8-year-old boy was abducted on his way from school. Panic attempted to swallow our family, but we immediately ran to the sanctuary altar. The brethren stood in the gap and prayed through the midnight hour. Miraculously, by 6:00 AM, the kidnapper himself brought my son back unharmed without demanding or collecting a single dime! What God cannot do does not exist!',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600',
+    createdAt: '2026-09-28T14:30:00Z',
+    name: 'Deacon John O.'
+  },
+  {
+    id: 'test-3',
+    title: "The Enemy's Verdict For Him Was Death, But God's Verdict Was Life",
+    content: 'The medical report stated multiple organ collapse with less than 48 hours to live. The doctors asked us to prepare for the worst. But the church family sent prayer cloths soaked in prayer and declared life according to Psalm 118:17. On the third day, his vitals normalized and today he is walking and testifying of the resurrection power of Christ!',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600',
+    createdAt: '2026-09-22T08:15:00Z',
+    name: 'Mr. & Mrs. Adebayo'
+  },
+  {
+    id: 'test-4',
+    title: "Delivered from Death's Door: A Triple Victory",
+    content: 'Within sixty days, I was targeted by armed robbers, survived a high-speed highway collision where the car was crushed, and overcame food poisoning. Through it all, the angels of the Lord shielded me from death. I am living proof that no weapon formed against a soldier of Jesus Christ shall ever prosper!',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600',
+    createdAt: '2026-09-15T18:00:00Z',
+    name: 'Elder Marcus T.'
+  },
+  {
+    id: 'test-5',
+    title: 'Through Tithing And Obedience: Barrenness Gave Way To Breakthrough.',
+    content: 'After 9 painful years of waiting, mockery, and dashed hopes from clinical specialists, my husband and I decided to honor God in radical obedience through our tithes and sacrificial covenant seeds. That same year, God answered by fire and blessed our home with healthy twins! We return all honor and thanksgiving to the King of Kings!',
+    image: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=800',
+    createdAt: '2026-10-02T12:00:00Z',
+    name: 'Sis. Ginika Nwachukwu and Family'
+  }
+];
+
 export const MOCK_USERS: User[] = [
   {
     id: 'u-1',
@@ -218,22 +208,148 @@ export const MOCK_USERS: User[] = [
   }
 ];
 
-// Simple reactive LocalStorage backed store
+import { api } from '../services/api';
+
+// Reactive Store with bidirectional Neon PostgreSQL backend syncing
 class DataStore {
   private sermons: Sermon[];
   private events: ChurchEvent[];
   private submissions: FormSubmission[];
   private donations: Donation[];
   private siteContent: SiteContent;
+  private news: NewsItem[];
+  private testimonies: Testimony[];
   private currentUser: User | null = null;
+  private listeners: Set<() => void> = new Set();
+  private isSyncing = false;
 
   constructor() {
     this.sermons = this.load('sjc_sermons', INITIAL_SERMONS);
-    this.events = this.load('sjc_events', INITIAL_EVENTS);
+
+    // Purge legacy hardcoded dummy events from localStorage
+    const savedEvents = this.load<ChurchEvent[]>('sjc_events', []);
+    const hasLegacyDummy = Array.isArray(savedEvents) && savedEvents.some(e => 
+      e.id === 'event-1' || e.id === 'event-2' || e.id === 'event-3' || e.id === 'event-4'
+    );
+    if (hasLegacyDummy) {
+      try { localStorage.removeItem('sjc_events'); } catch {}
+      this.events = [];
+    } else {
+      this.events = savedEvents;
+    }
+
     this.submissions = this.load('sjc_submissions', INITIAL_SUBMISSIONS);
     this.donations = this.load('sjc_donations', INITIAL_DONATIONS);
     this.siteContent = this.load('sjc_content', INITIAL_SITE_CONTENT);
-    this.currentUser = this.load<User | null>('sjc_current_user', MOCK_USERS[0]);
+    this.news = this.load('sjc_news', []);
+    const savedTestimonies = this.load<Testimony[]>('sjc_testimonies', []);
+    this.testimonies = savedTestimonies && savedTestimonies.length > 0 ? savedTestimonies : INITIAL_TESTIMONIES;
+    // Only restore user if an auth token exists (i.e., they actually logged in)
+    const hasToken = !!localStorage.getItem('sjc_auth_token');
+    this.currentUser = hasToken ? this.load<User | null>('sjc_current_user', null) : null;
+
+    // Asynchronously synchronize with backend database
+    this.syncWithBackend();
+  }
+
+  // Subscribe to store updates for real-time reactivity
+  subscribe(listener: () => void) {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  }
+
+  private notify() {
+    this.listeners.forEach(listener => {
+      try {
+        listener();
+      } catch (e) {
+        console.error('Error in store listener:', e);
+      }
+    });
+  }
+
+  // Hydrate from Neon PostgreSQL backend API
+  async syncWithBackend() {
+    if (this.isSyncing) return;
+    this.isSyncing = true;
+    try {
+      // 1. Fetch live sermons
+      try {
+        const sermonsRes = await api.sermons.getAll();
+        if (sermonsRes.sermons && sermonsRes.sermons.length > 0) {
+          this.sermons = sermonsRes.sermons;
+          this.save('sjc_sermons', this.sermons);
+        }
+      } catch (err) {
+        console.warn('Backend sermons sync offline, using cached/initial:', err);
+      }
+
+      // 2. Fetch live events directly from database
+      try {
+        const eventsRes = await api.events.getAll();
+        if (eventsRes && Array.isArray(eventsRes.events)) {
+          this.events = eventsRes.events;
+          this.save('sjc_events', this.events);
+        }
+      } catch (err) {
+        console.warn('Backend events sync offline, using cached/initial:', err);
+      }
+
+      // 3. Fetch live site content
+      try {
+        const contentRes = await api.content.get();
+        if (contentRes.content) {
+          this.siteContent = contentRes.content;
+          this.save('sjc_content', this.siteContent);
+        }
+      } catch (err) {
+        console.warn('Backend content sync offline, using cached/initial:', err);
+      }
+
+      // 4. Fetch admin inbox if authenticated
+      try {
+        const subRes = await api.submissions.getAll();
+        if (subRes.submissions) {
+          this.submissions = subRes.submissions;
+          this.save('sjc_submissions', this.submissions);
+        }
+      } catch {}
+
+      // 5. Fetch donations if super admin
+      try {
+        const donRes = await api.donations.getAll();
+        if (donRes.donations) {
+          this.donations = donRes.donations;
+          this.save('sjc_donations', this.donations);
+        }
+      } catch {}
+
+      // 6. Fetch live news
+      try {
+        const newsRes = await api.news.getAll();
+        if (newsRes.news) {
+          this.news = newsRes.news;
+          this.save('sjc_news', this.news);
+        }
+      } catch {}
+
+      // 7. Fetch live testimonies
+      try {
+        const testRes = await api.testimonies.getAll();
+        if (testRes.testimonies) {
+          this.testimonies = testRes.testimonies;
+          this.save('sjc_testimonies', this.testimonies);
+        }
+      } catch {}
+
+      this.notify();
+    } catch (e) {
+      console.warn('Backend sync completed with fallbacks:', e);
+    } finally {
+      this.isSyncing = false;
+    }
   }
 
   private load<T>(key: string, fallback: T): T {
@@ -253,88 +369,311 @@ class DataStore {
     }
   }
 
-  // Current User (Always active for immediate admin panel access)
-  getCurrentUser(): User {
-    if (!this.currentUser) {
-      this.currentUser = MOCK_USERS[0];
-      this.save('sjc_current_user', this.currentUser);
-    }
+  // Current User
+  getCurrentUser(): User | null {
     return this.currentUser;
   }
+
+  isAuthenticated(): boolean {
+    return !!this.currentUser && !!localStorage.getItem('sjc_auth_token');
+  }
+
   setCurrentUser(user: User | null) {
-    this.currentUser = user || MOCK_USERS[0];
-    this.save('sjc_current_user', this.currentUser);
+    this.currentUser = user;
+    if (user) {
+      this.save('sjc_current_user', user);
+    } else {
+      try { localStorage.removeItem('sjc_current_user'); } catch {}
+    }
+    this.notify();
+  }
+
+  logout() {
+    this.currentUser = null;
+    try {
+      localStorage.removeItem('sjc_current_user');
+      localStorage.removeItem('sjc_auth_token');
+    } catch {}
+    this.notify();
   }
 
   // Sermons
   getSermons() { return [...this.sermons]; }
-  addSermon(sermon: Omit<Sermon, 'id'>) {
-    const newSermon = { ...sermon, id: `sermon-${Date.now()}` };
+
+  async addSermon(sermon: Omit<Sermon, 'id'>) {
+    const tempId = `sermon-${Date.now()}`;
+    const newSermon: Sermon = { ...sermon, id: tempId };
     this.sermons = [newSermon, ...this.sermons];
     this.save('sjc_sermons', this.sermons);
+    this.notify();
+
+    // Persist to Neon DB via API
+    try {
+      const res = await api.sermons.create(sermon);
+      if (res.sermon) {
+        this.sermons = this.sermons.map(s => s.id === tempId ? res.sermon : s);
+        this.save('sjc_sermons', this.sermons);
+        this.notify();
+        return res.sermon;
+      }
+    } catch (err) {
+      console.warn('Failed to persist sermon to backend, cached locally:', err);
+    }
     return newSermon;
   }
-  deleteSermon(id: string) {
+
+  async deleteSermon(id: string) {
     this.sermons = this.sermons.filter(s => s.id !== id);
     this.save('sjc_sermons', this.sermons);
+    this.notify();
+
+    try {
+      await api.sermons.delete(id);
+    } catch (err) {
+      console.warn('Failed to delete sermon from backend:', err);
+    }
   }
 
   // Events
   getEvents() { return [...this.events]; }
-  addEvent(event: Omit<ChurchEvent, 'id' | 'registrationsCount'>) {
-    const newEvent: ChurchEvent = { ...event, id: `event-${Date.now()}`, registrationsCount: 0 };
+
+  async addEvent(event: Omit<ChurchEvent, 'id' | 'registrationsCount'>) {
+    const tempId = `event-${Date.now()}`;
+    const newEvent: ChurchEvent = { ...event, id: tempId, registrationsCount: 0 };
     this.events = [newEvent, ...this.events];
     this.save('sjc_events', this.events);
+    this.notify();
+
+    try {
+      const res = await api.events.create(event);
+      if (res.event) {
+        this.events = this.events.map(e => e.id === tempId ? res.event : e);
+        this.save('sjc_events', this.events);
+        this.notify();
+        return res.event;
+      }
+    } catch (err) {
+      console.warn('Failed to persist event to backend, cached locally:', err);
+    }
     return newEvent;
   }
-  registerForEvent(eventId: string) {
+
+  async deleteEvent(id: string) {
+    this.events = this.events.filter(e => e.id !== id);
+    this.save('sjc_events', this.events);
+    this.notify();
+
+    try {
+      await api.events.delete(id);
+    } catch (err) {
+      console.warn('Failed to delete event from backend:', err);
+    }
+  }
+
+  async registerForEvent(eventId: string, details?: { name: string; email: string; phone?: string; guestsCount?: number }) {
     this.events = this.events.map(ev => {
       if (ev.id === eventId) {
-        return { ...ev, registrationsCount: ev.registrationsCount + 1 };
+        const count = details?.guestsCount || 1;
+        return { ...ev, registrationsCount: ev.registrationsCount + count };
       }
       return ev;
     });
     this.save('sjc_events', this.events);
+    this.notify();
+
+    if (details?.name && details?.email) {
+      try {
+        const res = await api.events.register(eventId, details);
+        if (res.event) {
+          this.events = this.events.map(e => e.id === eventId ? res.event : e);
+          this.save('sjc_events', this.events);
+          this.notify();
+        }
+      } catch (err) {
+        console.warn('Failed to register RSVP on backend:', err);
+      }
+    }
   }
 
   // Submissions
   getSubmissions() { return [...this.submissions]; }
-  addSubmission(sub: Omit<FormSubmission, 'id' | 'createdAt' | 'isRead'>) {
+
+  async addSubmission(sub: Omit<FormSubmission, 'id' | 'createdAt' | 'isRead'>) {
+    const tempId = `sub-${Date.now()}`;
     const newSub: FormSubmission = {
       ...sub,
-      id: `sub-${Date.now()}`,
+      id: tempId,
       createdAt: new Date().toISOString(),
       isRead: false
     };
     this.submissions = [newSub, ...this.submissions];
     this.save('sjc_submissions', this.submissions);
+    this.notify();
+
+    try {
+      const res = await api.submissions.create(sub);
+      if (res.submission) {
+        this.submissions = this.submissions.map(s => s.id === tempId ? res.submission : s);
+        this.save('sjc_submissions', this.submissions);
+        this.notify();
+        return res.submission;
+      }
+    } catch (err) {
+      console.warn('Failed to send submission to backend:', err);
+    }
     return newSub;
   }
-  toggleReadSubmission(id: string) {
+
+  async toggleReadSubmission(id: string) {
     this.submissions = this.submissions.map(s => s.id === id ? { ...s, isRead: !s.isRead } : s);
     this.save('sjc_submissions', this.submissions);
+    this.notify();
+
+    try {
+      await api.submissions.toggleRead(id);
+    } catch (err) {
+      console.warn('Failed to toggle read status on backend:', err);
+    }
   }
 
   // Donations
   getDonations() { return [...this.donations]; }
-  addDonation(donation: Omit<Donation, 'id' | 'date' | 'status'>) {
+
+  async addDonation(donation: Omit<Donation, 'id' | 'date' | 'status'>) {
+    const tempId = `don-${Math.floor(1000 + Math.random() * 9000)}`;
     const newDon: Donation = {
       ...donation,
-      id: `don-${Math.floor(1000 + Math.random() * 9000)}`,
+      id: tempId,
       date: new Date().toISOString().split('T')[0],
       status: 'Completed'
     };
     this.donations = [newDon, ...this.donations];
     this.save('sjc_donations', this.donations);
+    this.notify();
+
+    try {
+      const res = await api.donations.record({
+        donorName: donation.donorName,
+        email: donation.email,
+        amount: donation.amount,
+        frequency: donation.frequency,
+        fund: donation.fund
+      });
+      if (res.donation) {
+        this.donations = this.donations.map(d => d.id === tempId ? {
+          id: res.donation.id,
+          donorName: res.donation.donorName,
+          email: res.donation.email,
+          amount: res.donation.amount,
+          frequency: String(res.donation.frequency).toUpperCase() === 'MONTHLY' ? 'monthly' : 'one-time',
+          fund: res.donation.fund,
+          status: 'Completed',
+          date: new Date().toISOString().split('T')[0]
+        } : d);
+        this.save('sjc_donations', this.donations);
+        this.notify();
+      }
+    } catch (err) {
+      console.warn('Failed to save donation on backend:', err);
+    }
     return newDon;
   }
 
   // Site Content
   getSiteContent() { return { ...this.siteContent }; }
-  updateSiteContent(updated: Partial<SiteContent>) {
+
+  async updateSiteContent(updated: Partial<SiteContent>) {
     this.siteContent = { ...this.siteContent, ...updated };
     this.save('sjc_content', this.siteContent);
+    this.notify();
+
+    try {
+      await api.content.update(updated);
+    } catch (err) {
+      console.warn('Failed to persist content updates on backend:', err);
+    }
+  }
+
+  // News
+  getNews() { return [...this.news]; }
+
+  async addNews(article: { title: string; content: string; image: string }) {
+    const tempId = `news-${Date.now()}`;
+    const newArticle: NewsItem = {
+      id: tempId,
+      ...article,
+      createdAt: new Date().toISOString()
+    };
+    this.news = [newArticle, ...this.news];
+    this.save('sjc_news', this.news);
+    this.notify();
+
+    try {
+      const res = await api.news.create(article);
+      if (res.article) {
+        this.news = this.news.map(n => n.id === tempId ? res.article : n);
+        this.save('sjc_news', this.news);
+        this.notify();
+        return res.article;
+      }
+    } catch (err) {
+      console.warn('Failed to save news to backend:', err);
+    }
+    return newArticle;
+  }
+
+  async deleteNews(id: string) {
+    this.news = this.news.filter(n => n.id !== id);
+    this.save('sjc_news', this.news);
+    this.notify();
+
+    try {
+      await api.news.delete(id);
+    } catch (err) {
+      console.warn('Failed to delete news from backend:', err);
+    }
+  }
+
+  // Testimonies
+  getTestimonies() { return [...this.testimonies]; }
+
+  async addTestimony(testimony: { title: string; content: string; image: string }) {
+    const tempId = `test-${Date.now()}`;
+    const newTestimony: Testimony = {
+      id: tempId,
+      ...testimony,
+      createdAt: new Date().toISOString()
+    };
+    this.testimonies = [newTestimony, ...this.testimonies];
+    this.save('sjc_testimonies', this.testimonies);
+    this.notify();
+
+    try {
+      const res = await api.testimonies.create(testimony);
+      if (res.testimony) {
+        this.testimonies = this.testimonies.map(t => t.id === tempId ? res.testimony : t);
+        this.save('sjc_testimonies', this.testimonies);
+        this.notify();
+        return res.testimony;
+      }
+    } catch (err) {
+      console.warn('Failed to save testimony to backend:', err);
+    }
+    return newTestimony;
+  }
+
+  async deleteTestimony(id: string) {
+    this.testimonies = this.testimonies.filter(t => t.id !== id);
+    this.save('sjc_testimonies', this.testimonies);
+    this.notify();
+
+    try {
+      await api.testimonies.delete(id);
+    } catch (err) {
+      console.warn('Failed to delete testimony from backend:', err);
+    }
   }
 }
 
 export const store = new DataStore();
+

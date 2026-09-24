@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Calendar, Video, Inbox, ArrowUpRight, Plus, CheckCircle, Shield } from 'lucide-react';
 import { store } from '../../data/store';
 
 export const AdminDashboard: React.FC = () => {
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    store.syncWithBackend();
+    return store.subscribe(() => setTick(t => t + 1));
+  }, []);
+
   const donations = store.getDonations();
   const events = store.getEvents();
   const sermons = store.getSermons();

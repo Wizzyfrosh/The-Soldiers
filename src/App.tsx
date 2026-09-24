@@ -29,6 +29,8 @@ import { PrayerRequest } from './pages/PrayerRequest';
 import { PlanVisit } from './pages/PlanVisit';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfService } from './pages/TermsOfService';
+import { NewsDetail } from './pages/NewsDetail';
+import { TestimonyDetail } from './pages/TestimonyDetail';
 import { NotFound } from './pages/NotFound';
 
 // Admin Hub
@@ -40,6 +42,8 @@ import { AdminEvents } from './pages/admin/AdminEvents';
 import { AdminGiving } from './pages/admin/AdminGiving';
 import { AdminInbox } from './pages/admin/AdminInbox';
 import { AdminContent } from './pages/admin/AdminContent';
+import { AdminNews } from './pages/admin/AdminNews';
+import { AdminTestimonies } from './pages/admin/AdminTestimonies';
 import { AdminUsers } from './pages/admin/AdminUsers';
 
 import { ChurchEvent, Sermon } from './types';
@@ -107,6 +111,8 @@ export const App: React.FC = () => {
           <Route path="/plan-a-visit" element={<PlanVisit onOpenPlanVisitModal={() => setIsPlanVisitOpen(true)} />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/testimonies/:id" element={<TestimonyDetail />} />
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -118,6 +124,8 @@ export const App: React.FC = () => {
           <Route path="/admin/inbox" element={<AdminLayout><AdminInbox /></AdminLayout>} />
           <Route path="/admin/content" element={<AdminLayout><AdminContent /></AdminLayout>} />
           <Route path="/admin/users" element={<AdminLayout><AdminUsers /></AdminLayout>} />
+          <Route path="/admin/news" element={<AdminLayout><AdminNews /></AdminLayout>} />
+          <Route path="/admin/testimonies" element={<AdminLayout><AdminTestimonies /></AdminLayout>} />
 
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />

@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Calendar, MapPin, ArrowRight, Shield, Heart, Sparkles } from 'lucide-react';
+import { Play, Calendar, MapPin, ArrowRight, Shield, Heart, Sparkles, Users, Lightbulb, Palette, Music, Zap, HandHeart, Baby, UserCheck, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../components/common/Button';
 import { SectionHeader } from '../components/common/SectionHeader';
 import { WaveDivider } from '../components/common/WaveDivider';
 import { FadeIn, StaggerContainer, StaggerItem, ScaleIn } from '../components/common/Animations';
 import { HeroSlideshow } from '../components/home/HeroSlideshow';
+import { EventCountdown } from '../components/home/EventCountdown';
+import { TestimoniesSection } from '../components/home/TestimoniesSection';
+import { LatestNewsSection } from '../components/home/LatestNewsSection';
 import { store } from '../data/store';
-import { ChurchEvent, Sermon } from '../types';
+import { ChurchEvent, Sermon, Testimony, NewsItem, CountdownEvent } from '../types';
 
 interface HomeProps {
   onOpenGiveModal: () => void;
@@ -23,18 +26,57 @@ export const Home: React.FC<HomeProps> = ({
   onSelectSermon,
   onSelectEvent
 }) => {
-  const [events] = useState<ChurchEvent[]>(store.getEvents());
-  const [sermons] = useState<Sermon[]>(store.getSermons());
+  const [events, setEvents] = useState<ChurchEvent[]>(store.getEvents());
+  const [sermons, setSermons] = useState<Sermon[]>(store.getSermons());
+  const [testimonies, setTestimonies] = useState<Testimony[]>(store.getTestimonies());
+  const [newsItems, setNewsItems] = useState<NewsItem[]>(store.getNews());
+  const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(events.length === 0);
   const siteContent = store.getSiteContent();
 
+  // Subscribe to store updates for real-time reactivity and sync with backend
+  useEffect(() => {
+    store.syncWithBackend().finally(() => {
+      setIsLoadingEvents(false);
+    });
+    const unsubscribe = store.subscribe(() => {
+      setEvents(store.getEvents());
+      setSermons(store.getSermons());
+      setTestimonies(store.getTestimonies());
+      setNewsItems(store.getNews());
+      setIsLoadingEvents(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  // 10 Ministries — icon-based, dynamic-ready
   const ministries = [
-    { name: "Men's Ministry", subtitle: "Mighty Men of Valor", img: "/images/mens.jpg", path: "/ministries/mens" },
-    { name: "Women's Ministry", subtitle: "Daughters of Destiny", img: "/images/womens.jpg", path: "/ministries/womens" },
-    { name: "Youth & Teens", subtitle: "IGNITE Generation", img: "/images/youth.jpg", path: "/ministries/youth" },
-    { name: "Children's Ministry", subtitle: "Kingdom Kids Academy", img: "/images/children.jpg", path: "/ministries/children" },
-    { name: "Outreach & Missions", subtitle: "Food Bank & Evangelism", img: "/images/outreach.jpg", path: "/ministries/outreach" },
-    { name: "Worship & Arts", subtitle: "Anointed Praise Team", img: "/images/pastor.jpg", path: "/ministries" }
+    { name: 'Family Life Ministry', subtitle: 'Strengthening Homes', icon: 'users', path: '/ministries' },
+    { name: 'Recreators-Inventors-Scientists Ministry', subtitle: 'Innovation & Discovery', icon: 'lightbulb', path: '/ministries' },
+    { name: 'Arts & Drama Ministry', subtitle: 'Creative Expression', icon: 'palette', path: '/ministries' },
+    { name: 'Dance Ministry', subtitle: 'Movement & Praise', icon: 'sparkles', path: '/ministries' },
+    { name: 'Music Ministry', subtitle: 'Anointed Sound', icon: 'music', path: '/ministries' },
+    { name: 'Youth Ministry', subtitle: 'IGNITE Generation', icon: 'zap', path: '/ministries/youth' },
+    { name: 'Spiritual Life & Power Ministry', subtitle: 'Walking in the Spirit', icon: 'flame', path: '/ministries' },
+    { name: 'Fellowship Ministry', subtitle: 'Community & Connection', icon: 'handheart', path: '/ministries' },
+    { name: 'Children Ministry', subtitle: 'Kingdom Kids', icon: 'baby', path: '/ministries/children' },
+    { name: 'Adult & Parental Ministry', subtitle: 'Mature in Faith', icon: 'usercheck', path: '/ministries' },
   ];
+
+  const getMinistryIcon = (icon: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      users: <Users className="w-6 h-6" />,
+      lightbulb: <Lightbulb className="w-6 h-6" />,
+      palette: <Palette className="w-6 h-6" />,
+      sparkles: <Sparkles className="w-6 h-6" />,
+      music: <Music className="w-6 h-6" />,
+      zap: <Zap className="w-6 h-6" />,
+      flame: <Flame className="w-6 h-6" />,
+      handheart: <HandHeart className="w-6 h-6" />,
+      baby: <Baby className="w-6 h-6" />,
+      usercheck: <UserCheck className="w-6 h-6" />,
+    };
+    return iconMap[icon] || <Heart className="w-6 h-6" />;
+  };
 
   return (
     <div className="w-full overflow-hidden bg-slate-50">
@@ -63,7 +105,7 @@ export const Home: React.FC<HomeProps> = ({
         </div>
       </section>
 
-      {/* SECTION 4: WELCOME / ABOUT BRIEF SPLIT */}
+      {/* SECTION 4: WELCOME / ABOUT BRIEF SPLIT — Updated to warm cream/charcoal palette */}
       <section className="py-20 px-4 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
@@ -72,13 +114,13 @@ export const Home: React.FC<HomeProps> = ({
               <div className="absolute -top-4 -left-4 w-72 h-72 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-navy-900 group">
                 <img
-                  src="/images/pastor.jpg"
-                  alt="Pastor Preaching"
+                  src="/images/bishop.png"
+                  alt="Bishop Ebelechukwu Elochukwu"
                   className="w-full h-[450px] object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-transparent to-transparent p-6 flex flex-col justify-end">
                   <span className="text-gold-400 font-bold text-xs uppercase tracking-widest">Lead Pastor</span>
-                  <h4 className="text-xl font-extrabold text-white uppercase font-display">Pastor David & Sarah Vance</h4>
+                  <h4 className="text-xl font-extrabold text-white uppercase font-display">Bishop Ebelechukwu Elochukwu</h4>
                   <p className="text-xs text-slate-300">"We invite you to step into the fullness of God's calling."</p>
                 </div>
               </div>
@@ -100,14 +142,15 @@ export const Home: React.FC<HomeProps> = ({
                 </p>
               </div>
 
+              {/* Vision & Mission cards — updated to warm cream/charcoal palette */}
               <div className="grid grid-cols-2 gap-4 pt-2">
-                <div className="p-4 bg-navy-900 text-white rounded-xl border-l-4 border-gold-500">
-                  <h5 className="font-extrabold text-sm font-display uppercase text-gold-400">Our Vision</h5>
-                  <p className="text-xs text-slate-300 mt-1">Strong in grace, enduring as a good soldier of Christ Jesus. (2 Tim 2:1-7)</p>
+                <div className="p-4 bg-[#F9F8F6] rounded-xl border-l-4 border-gold-500 shadow-sm">
+                  <h5 className="font-extrabold text-sm font-display uppercase text-gold-600">Our Vision</h5>
+                  <p className="text-xs text-[#4A4A4A] mt-1">Strong in grace, enduring as a good soldier of Christ Jesus. (2 Tim 2:1-7)</p>
                 </div>
-                <div className="p-4 bg-navy-900 text-white rounded-xl border-l-4 border-gold-500">
-                  <h5 className="font-extrabold text-sm font-display uppercase text-gold-400">Our Mission</h5>
-                  <p className="text-xs text-slate-300 mt-1">Appointed to bear lasting fruit in the power of the Holy Spirit. (John 15:16-17)</p>
+                <div className="p-4 bg-[#F9F8F6] rounded-xl border-l-4 border-gold-500 shadow-sm">
+                  <h5 className="font-extrabold text-sm font-display uppercase text-gold-600">Our Mission</h5>
+                  <p className="text-xs text-[#4A4A4A] mt-1">Appointed to bear lasting fruit in the power of the Holy Spirit. (John 15:16-17)</p>
                 </div>
               </div>
 
@@ -130,52 +173,85 @@ export const Home: React.FC<HomeProps> = ({
         </div>
       </section>
 
-      {/* SECTION 5: "FIND YOUR PLACE. SERVE WITH PURPOSE." (MINISTRY GRID - WARM LIQUID GLASS) */}
-      <section className="py-24 bg-[#EFEFEF] relative overflow-hidden">
-
+      {/* SECTION 5: "ANOINTED SERMONS" — 3 Most Recent Sermons with Watch More Button */}
+      <section className="py-20 sm:py-24 bg-[#EFEFEF] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
           
-          <FadeIn>
-            <SectionHeader
-              badge="DISCOVER YOUR PLACE"
-              title="Find Your Place. Serve with Purpose."
-              subtitle="Every soldier needs a battalion. Discover where you fit in the fight to grow, serve, and stand firm."
-            />
+          <FadeIn className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="inline-block px-3.5 py-1 text-[11px] font-black uppercase tracking-widest bg-navy-950 text-gold-400 rounded-full border border-navy-900 shadow-sm">
+              ANOINTED PREACHING & TEACHING
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase font-display text-navy-950">
+              Anointed Sermons
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Equipping the saints with the uncompromised Word of Truth, prophetic revelations, and supernatural Holy Ghost authority.
+            </p>
           </FadeIn>
 
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ministries.map((min, idx) => (
-              <StaggerItem key={idx}>
+          {/* 3 Most Recent Sermon Cards */}
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {sermons.slice(0, 3).map((sermon) => (
+              <StaggerItem key={sermon.id}>
                 <div
-                  className="group relative rounded-2xl overflow-hidden bg-white/50 backdrop-blur-md border border-white/70 shadow-sm hover:bg-white/70 hover:shadow-md transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between h-full"
+                  onClick={() => onSelectSermon(sermon)}
+                  className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer flex flex-col h-full"
                 >
-                  <div className="h-60 overflow-hidden relative">
+                  {/* Video Thumbnail with Play Button */}
+                  <div className="relative aspect-video overflow-hidden bg-navy-950">
                     <img
-                      src={min.img}
-                      alt={min.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      src={
+                        sermon.thumbnail ||
+                        (sermon.youtubeId ? `https://img.youtube.com/vi/${sermon.youtubeId}/hqdefault.jpg` : '/images/worship_hero.jpg')
+                      }
+                      alt={sermon.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-navy-950/30 group-hover:bg-navy-950/10 transition-colors flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-gold-500 text-navy-950 flex items-center justify-center shadow-gold group-hover:scale-110 transition-transform">
+                        <Play className="w-5 h-5 fill-current ml-0.5" />
+                      </div>
+                    </div>
+                    {/* Series Badge */}
+                    <div className="absolute top-3 left-3 bg-navy-950/80 backdrop-blur-md text-gold-400 font-black text-[10px] uppercase px-2.5 py-1 rounded-md border border-gold-500/30">
+                      {sermon.series}
+                    </div>
                   </div>
 
-                  <div className="p-6 relative z-10 -mt-16 space-y-2">
-                    <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest block drop-shadow">{min.subtitle}</span>
-                    <h3 className="text-2xl font-black uppercase font-display text-white group-hover:text-gold-300 transition-colors drop-shadow-md">
-                      {min.name}
-                    </h3>
-                    
-                    <div className="pt-3">
-                      <Link to={min.path}>
-                        <span className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-gold-400 group-hover:text-gold-300">
-                          Explore Ministry <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                      </Link>
+                  {/* Sermon Details */}
+                  <div className="p-6 flex flex-col flex-1 justify-between space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs text-slate-500">
+                        <span className="font-semibold text-gold-600">{sermon.speaker}</span>
+                        <span className="font-mono">{sermon.date}</span>
+                      </div>
+                      <h3 className="text-base sm:text-lg font-black uppercase font-display text-navy-950 group-hover:text-gold-600 transition-colors leading-snug line-clamp-2">
+                        {sermon.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+                        {sermon.description}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs font-bold text-navy-950 group-hover:text-gold-600 uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors">
+                        Watch Message <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </span>
                     </div>
                   </div>
                 </div>
               </StaggerItem>
             ))}
           </StaggerContainer>
+
+          {/* Watch More Sermons CTA Button */}
+          <div className="text-center pt-2">
+            <Link to="/sermons">
+              <Button variant="navy" size="lg" icon={<Play className="w-4 h-4 fill-current text-gold-400" />}>
+                Watch More Sermons
+              </Button>
+            </Link>
+          </div>
 
         </div>
       </section>
@@ -235,69 +311,22 @@ export const Home: React.FC<HomeProps> = ({
         <WaveDivider fillColor="#ffffff" />
       </div>
 
-      {/* SECTION 7: UPCOMING EVENTS & REGISTRATION */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          
-          <FadeIn>
-            <SectionHeader
-              badge="UPCOMING EVENTS"
-              title="#SoldiersInAction Events"
-              subtitle="We invite you, your family, and friends to join us at our upcoming events."
-            />
-          </FadeIn>
-
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-            {events.map((ev) => (
-              <StaggerItem key={ev.id}>
-                <div className="bg-navy-900 text-white rounded-2xl overflow-hidden shadow-xl border border-navy-800 flex flex-col justify-between group h-full">
-                  <div>
-                    <div className="relative h-44 overflow-hidden">
-                      <img src={ev.image} alt={ev.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                      <span className="absolute top-3 left-3 bg-gold-500 text-navy-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
-                        {ev.category}
-                      </span>
-                    </div>
-                    <div className="p-5 space-y-2">
-                      <div className="flex items-center gap-1.5 text-gold-400 text-xs font-bold">
-                        <Calendar className="w-3.5 h-3.5" /> {ev.date}
-                      </div>
-                      <h4 className="font-extrabold text-base uppercase font-display line-clamp-2 text-white group-hover:text-gold-400 transition-colors">
-                        {ev.title}
-                      </h4>
-                      <p className="text-xs text-slate-300 line-clamp-2">{ev.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="p-5 pt-0">
-                    <Button
-                      variant="gold"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => onSelectEvent(ev)}
-                    >
-                      Register Now
-                    </Button>
-                  </div>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-
-          <FadeIn delay={0.3}>
-            <div className="mt-12 text-center">
-              <Link to="/events">
-                <Button variant="navy" size="md">
-                  View All Upcoming Events & Conferences
-                </Button>
-              </Link>
-            </div>
-          </FadeIn>
-
-        </div>
+      {/* SECTION 7: UPCOMING EVENT HERO CARD — Redesigned after uploaded image with dynamic events */}
+      <section className="bg-slate-50 py-16">
+        <EventCountdown
+          events={events}
+          onSelectEvent={onSelectEvent}
+          isLoading={isLoadingEvents && events.length === 0}
+        />
       </section>
 
-      {/* SECTION 8: LOCATION & SERVICE TIMES (WARM LIQUID GLASS) */}
+      {/* SECTION 8: TESTIMONIES (5-CARD MIRACLE DISPLAY) */}
+      <TestimoniesSection testimonies={testimonies.slice(0, 5)} />
+
+      {/* SECTION 9: LATEST NEWS */}
+      <LatestNewsSection newsItems={newsItems.slice(0, 3)} />
+
+      {/* SECTION 10: LOCATION & SERVICE TIMES (WARM LIQUID GLASS) */}
       <section className="py-24 bg-[#F9F8F6] relative overflow-hidden">
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
@@ -323,7 +352,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div className="h-[380px] sm:h-[420px] rounded-2xl overflow-hidden border border-white/40 shadow-xl relative group">
                   <iframe
                     title="Church Location Map"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104928.34791350478!2d-92.38573199999999!3d34.7464809!2m3!1f0!0f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87d2a138084a7e93%3A0x6b5a38ef2f9a120!2sLittle%20Rock%2C%20AR!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104928.34791350478!2d-92.38573199999999!3d34.7464809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87d2a138084a7e93%3A0x6b5a38ef2f9a120!2sLittle%20Rock%2C%20AR!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
                     className="w-full h-full border-0 group-hover:brightness-105 transition-all"
                     loading="lazy"
                   ></iframe>

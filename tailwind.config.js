@@ -25,7 +25,8 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        display: ['Montserrat', 'Oswald', 'Inter', 'sans-serif']
+        display: ['Montserrat', 'Oswald', 'Inter', 'sans-serif'],
+        playfair: ['"Playfair Display"', 'Georgia', 'serif']
       },
       boxShadow: {
         'gold': '0 4px 20px -2px rgba(245, 166, 35, 0.4)',
