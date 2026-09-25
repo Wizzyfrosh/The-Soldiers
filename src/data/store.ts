@@ -1,132 +1,10 @@
 import { ChurchEvent, Donation, FormSubmission, Sermon, SiteContent, User, NewsItem, Testimony } from '../types';
 
-export const INITIAL_SERMONS: Sermon[] = [
-  {
-    id: 'sermon-1',
-    title: 'Putting On The Whole Armor of God',
-    youtubeId: 'Lw8jG2nOQp8',
-    speaker: 'Pastor David Vance',
-    series: 'Spiritual Warfare 101',
-    date: '2026-09-13',
-    featured: true,
-    description: 'Discover how to stand firm against the schemes of the enemy by clothing yourself in truth, righteousness, and the Word of God.',
-    scripture: 'Ephesians 6:10-18'
-  },
-  {
-    id: 'sermon-2',
-    title: 'Unshakable Faith in Troubled Times',
-    youtubeId: 'kJQP7kiw5Fk',
-    speaker: 'Pastor David Vance',
-    series: 'Standing Firm',
-    date: '2026-09-06',
-    featured: true,
-    description: 'When the foundations are shaken, where do the righteous stand? Learn how covenant promises ground your soul.',
-    scripture: 'Psalm 11:3, Hebrews 12:28'
-  },
-  {
-    id: 'sermon-3',
-    title: 'The Sword of the Spirit: Operating in Authority',
-    youtubeId: 'dQw4w9WgXcQ',
-    speaker: 'Elder Marcus Thorne',
-    series: 'Spiritual Warfare 101',
-    date: '2026-08-30',
-    featured: false,
-    description: 'God\'s Word is not just a book—it is a living blade that cuts through darkness and releases Kingdom breakthrough.',
-    scripture: 'Hebrews 4:12'
-  },
-  {
-    id: 'sermon-4',
-    title: 'Breakthrough Through Worship',
-    youtubeId: '9bZkp7q19f0',
-    speaker: 'Pastor Sarah Vance',
-    series: 'Victorious Living',
-    date: '2026-08-23',
-    featured: false,
-    description: 'Praise is your weapon before the battle is even won. See how Paul and Silas unlocked prison doors with praise.',
-    scripture: 'Acts 16:25-26'
-  }
-];
-
+export const INITIAL_SERMONS: Sermon[] = [];
 export const INITIAL_EVENTS: ChurchEvent[] = [];
+export const INITIAL_SUBMISSIONS: FormSubmission[] = [];
+export const INITIAL_DONATIONS: Donation[] = [];
 
-export const INITIAL_SUBMISSIONS: FormSubmission[] = [
-  {
-    id: 'sub-1',
-    type: 'PRAYER_REQUEST',
-    name: 'Eleanor Vance',
-    email: 'eleanor@example.com',
-    phone: '(555) 234-5678',
-    message: 'Please pray for my husband\'s upcoming heart procedure this Thursday. Believing for complete healing and peace.',
-    isRead: false,
-    isPrivate: true,
-    createdAt: '2026-09-18T14:30:00Z'
-  },
-  {
-    id: 'sub-2',
-    type: 'PLAN_VISIT',
-    name: 'Michael & Sarah Jenkins',
-    email: 'mjenkins@example.com',
-    phone: '(555) 876-5432',
-    message: 'We recently moved to the area and plan to visit this Sunday with our two kids (ages 7 and 10). Would love VIP seating!',
-    isRead: false,
-    isPrivate: false,
-    createdAt: '2026-09-17T09:15:00Z'
-  },
-  {
-    id: 'sub-3',
-    type: 'CONTACT',
-    name: 'David Reynolds',
-    email: 'dreynolds@example.com',
-    phone: '(555) 432-1098',
-    message: 'Interested in volunteering with the Outreach Food Bank team. What is the orientation process?',
-    isRead: true,
-    isPrivate: false,
-    createdAt: '2026-09-15T16:45:00Z'
-  }
-];
-
-export const INITIAL_DONATIONS: Donation[] = [
-  {
-    id: 'don-1001',
-    donorName: 'Robert Sterling',
-    email: 'r.sterling@example.com',
-    amount: 250.00,
-    frequency: 'monthly',
-    fund: 'General Fund',
-    status: 'Completed',
-    date: '2026-09-18'
-  },
-  {
-    id: 'don-1002',
-    donorName: 'Anonymous Soldier',
-    email: 'donor@example.com',
-    amount: 1000.00,
-    frequency: 'one-time',
-    fund: 'Missions & Outreach',
-    status: 'Completed',
-    date: '2026-09-16'
-  },
-  {
-    id: 'don-1003',
-    donorName: 'Patricia & Daniel Gomez',
-    email: 'gomezfamily@example.com',
-    amount: 100.00,
-    frequency: 'monthly',
-    fund: 'Building Fund',
-    status: 'Completed',
-    date: '2026-09-14'
-  },
-  {
-    id: 'don-1004',
-    donorName: 'Jessica Taylor',
-    email: 'jtaylor@example.com',
-    amount: 50.00,
-    frequency: 'one-time',
-    fund: 'Youth Ministry',
-    status: 'Completed',
-    date: '2026-09-12'
-  }
-];
 
 export const INITIAL_SITE_CONTENT: SiteContent = {
   heroTitle: "WELCOME TO SOLDIERS OF JESUS CHRIST",
@@ -136,7 +14,7 @@ export const INITIAL_SITE_CONTENT: SiteContent = {
   seasonalSubheadline: "Going all-in on community, connection, and spiritual breakthrough every single Sunday.",
   seasonalBody: "This season, we are calling you back home—and into purpose. Discover where you fit in ministry. Get involved in small groups, prayer watch, and community outreach. Let's grow stronger together as one family in Christ!",
   sundayServiceTime: "SUNDAYS AT 10:00 AM",
-  address: "1709 John Barrow Rd. Little Rock, AR 72204",
+  address: "Baltimore City, USA",
   phone: "(501) 555-0199",
   email: "info@soldiersofjesuschrist.org"
 };
@@ -187,7 +65,7 @@ export const INITIAL_TESTIMONIES: Testimony[] = [
 export const MOCK_USERS: User[] = [
   {
     id: 'u-1',
-    name: 'Pastor David Vance',
+    name: 'Prophet Ebelechukwu Elochukwu',
     email: 'admin@soldiers.org',
     role: 'SUPER_ADMIN',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150'
@@ -238,8 +116,30 @@ class DataStore {
       this.events = savedEvents;
     }
 
-    this.submissions = this.load('sjc_submissions', INITIAL_SUBMISSIONS);
-    this.donations = this.load('sjc_donations', INITIAL_DONATIONS);
+    // Purge legacy hardcoded dummy submissions from localStorage
+    const savedSubmissions = this.load<FormSubmission[]>('sjc_submissions', []);
+    const hasLegacySub = Array.isArray(savedSubmissions) && savedSubmissions.some(s =>
+      s.id === 'sub-1' || s.id === 'sub-2' || s.id === 'sub-3'
+    );
+    if (hasLegacySub) {
+      try { localStorage.removeItem('sjc_submissions'); } catch {}
+      this.submissions = [];
+    } else {
+      this.submissions = savedSubmissions;
+    }
+
+    // Purge legacy hardcoded dummy donations from localStorage
+    const savedDonations = this.load<Donation[]>('sjc_donations', []);
+    const hasLegacyDon = Array.isArray(savedDonations) && savedDonations.some(d =>
+      d.id === 'don-1' || d.id === 'don-2' || d.id === 'don-3' || d.id === 'don-4'
+    );
+    if (hasLegacyDon) {
+      try { localStorage.removeItem('sjc_donations'); } catch {}
+      this.donations = [];
+    } else {
+      this.donations = savedDonations;
+    }
+
     this.siteContent = this.load('sjc_content', INITIAL_SITE_CONTENT);
     this.news = this.load('sjc_news', []);
     const savedTestimonies = this.load<Testimony[]>('sjc_testimonies', []);
@@ -271,14 +171,16 @@ class DataStore {
   }
 
   // Hydrate from Neon PostgreSQL backend API
+  // CRITICAL: Always replace local data with backend truth, even if backend returns empty arrays.
+  // This prevents "ghost" items from reappearing after deletion.
   async syncWithBackend() {
     if (this.isSyncing) return;
     this.isSyncing = true;
     try {
-      // 1. Fetch live sermons
+      // 1. Fetch live sermons — always trust backend
       try {
         const sermonsRes = await api.sermons.getAll();
-        if (sermonsRes.sermons && sermonsRes.sermons.length > 0) {
+        if (sermonsRes.sermons) {
           this.sermons = sermonsRes.sermons;
           this.save('sjc_sermons', this.sermons);
         }
@@ -286,7 +188,7 @@ class DataStore {
         console.warn('Backend sermons sync offline, using cached/initial:', err);
       }
 
-      // 2. Fetch live events directly from database
+      // 2. Fetch live events — always trust backend
       try {
         const eventsRes = await api.events.getAll();
         if (eventsRes && Array.isArray(eventsRes.events)) {
@@ -308,7 +210,7 @@ class DataStore {
         console.warn('Backend content sync offline, using cached/initial:', err);
       }
 
-      // 4. Fetch admin inbox if authenticated
+      // 4. Fetch admin inbox — always trust backend
       try {
         const subRes = await api.submissions.getAll();
         if (subRes.submissions) {
@@ -317,16 +219,27 @@ class DataStore {
         }
       } catch {}
 
-      // 5. Fetch donations if super admin
+      // 5. Fetch donations — always trust backend
       try {
         const donRes = await api.donations.getAll();
-        if (donRes.donations) {
-          this.donations = donRes.donations;
+        if (donRes && Array.isArray(donRes.donations)) {
+          this.donations = donRes.donations.map((d: any) => ({
+            id: d.id,
+            donorName: d.donorName,
+            email: d.email,
+            amount: typeof d.amount === 'number' ? d.amount : parseFloat(d.amount || '0'),
+            frequency: d.frequency ? (String(d.frequency).toLowerCase() === 'monthly' ? 'monthly' : 'one-time') : 'one-time',
+            fund: d.fund || 'General Fund',
+            status: d.status || 'Completed',
+            date: d.date || (d.createdAt ? String(d.createdAt).split('T')[0] : new Date().toISOString().split('T')[0])
+          }));
           this.save('sjc_donations', this.donations);
         }
-      } catch {}
+      } catch (err) {
+        console.warn('Backend donations sync offline, using cached/initial:', err);
+      }
 
-      // 6. Fetch live news
+      // 6. Fetch live news — always trust backend
       try {
         const newsRes = await api.news.getAll();
         if (newsRes.news) {
@@ -335,7 +248,7 @@ class DataStore {
         }
       } catch {}
 
-      // 7. Fetch live testimonies
+      // 7. Fetch live testimonies — always trust backend
       try {
         const testRes = await api.testimonies.getAll();
         if (testRes.testimonies) {
@@ -401,37 +314,32 @@ class DataStore {
   getSermons() { return [...this.sermons]; }
 
   async addSermon(sermon: Omit<Sermon, 'id'>) {
-    const tempId = `sermon-${Date.now()}`;
-    const newSermon: Sermon = { ...sermon, id: tempId };
-    this.sermons = [newSermon, ...this.sermons];
-    this.save('sjc_sermons', this.sermons);
-    this.notify();
-
-    // Persist to Neon DB via API
-    try {
-      const res = await api.sermons.create(sermon);
-      if (res.sermon) {
-        this.sermons = this.sermons.map(s => s.id === tempId ? res.sermon : s);
-        this.save('sjc_sermons', this.sermons);
-        this.notify();
-        return res.sermon;
-      }
-    } catch (err) {
-      console.warn('Failed to persist sermon to backend, cached locally:', err);
+    const res = await api.sermons.create(sermon);
+    if (res.sermon) {
+      this.sermons = [res.sermon, ...this.sermons.filter(s => s.id !== res.sermon.id)];
+      this.save('sjc_sermons', this.sermons);
+      this.notify();
+      return res.sermon;
     }
-    return newSermon;
+    throw new Error('Server returned empty response when publishing sermon.');
+  }
+
+  async updateSermon(id: string, data: Partial<Sermon>) {
+    const res = await api.sermons.update(id, data);
+    if (res.sermon) {
+      this.sermons = this.sermons.map(s => s.id === id ? res.sermon : s);
+      this.save('sjc_sermons', this.sermons);
+      this.notify();
+      return res.sermon;
+    }
+    throw new Error('Server returned empty response when updating sermon.');
   }
 
   async deleteSermon(id: string) {
+    await api.sermons.delete(id);
     this.sermons = this.sermons.filter(s => s.id !== id);
     this.save('sjc_sermons', this.sermons);
     this.notify();
-
-    try {
-      await api.sermons.delete(id);
-    } catch (err) {
-      console.warn('Failed to delete sermon from backend:', err);
-    }
   }
 
   // Events
@@ -456,6 +364,24 @@ class DataStore {
       console.warn('Failed to persist event to backend, cached locally:', err);
     }
     return newEvent;
+  }
+
+  async updateEvent(id: string, data: Partial<ChurchEvent>) {
+    this.events = this.events.map(e => e.id === id ? { ...e, ...data } : e);
+    this.save('sjc_events', this.events);
+    this.notify();
+
+    try {
+      const res = await api.events.update(id, data);
+      if (res.event) {
+        this.events = this.events.map(e => e.id === id ? res.event : e);
+        this.save('sjc_events', this.events);
+        this.notify();
+        return res.event;
+      }
+    } catch (err) {
+      console.warn('Failed to update event on backend:', err);
+    }
   }
 
   async deleteEvent(id: string) {
@@ -536,6 +462,18 @@ class DataStore {
     }
   }
 
+  async deleteSubmission(id: string) {
+    this.submissions = this.submissions.filter(s => s.id !== id);
+    this.save('sjc_submissions', this.submissions);
+    this.notify();
+
+    try {
+      await api.submissions.delete(id);
+    } catch (err) {
+      console.warn('Failed to delete submission from backend:', err);
+    }
+  }
+
   // Donations
   getDonations() { return [...this.donations]; }
 
@@ -577,6 +515,18 @@ class DataStore {
       console.warn('Failed to save donation on backend:', err);
     }
     return newDon;
+  }
+
+  async deleteDonation(id: string) {
+    this.donations = this.donations.filter(d => d.id !== id);
+    this.save('sjc_donations', this.donations);
+    this.notify();
+
+    try {
+      await api.donations.delete(id);
+    } catch (err) {
+      console.warn('Failed to delete donation from backend:', err);
+    }
   }
 
   // Site Content
@@ -637,7 +587,7 @@ class DataStore {
   // Testimonies
   getTestimonies() { return [...this.testimonies]; }
 
-  async addTestimony(testimony: { title: string; content: string; image: string }) {
+  async addTestimony(testimony: { title: string; content: string; image: string; name?: string }) {
     const tempId = `test-${Date.now()}`;
     const newTestimony: Testimony = {
       id: tempId,

@@ -128,6 +128,9 @@ eventsRouter.delete('/:id', authenticateToken, requireRole(['SUPER_ADMIN', 'EDIT
 
     return res.json({ message: 'Event deleted successfully.' });
   } catch (error: any) {
+    if (error.code === 'P2025') {
+      return res.json({ message: 'Event removed successfully.' });
+    }
     console.error('Delete event error:', error);
     return res.status(500).json({ error: 'Failed to delete event.' });
   }

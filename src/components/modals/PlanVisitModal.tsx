@@ -88,7 +88,7 @@ export const PlanVisitModal: React.FC<PlanVisitModalProps> = ({ isOpen, onClose,
                 <Clock className="w-4 h-4 text-gold-500 shrink-0" /> Service Time: {visitDate}
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-gold-500 shrink-0" /> 1709 John Barrow Rd, Little Rock, AR
+                <MapPin className="w-4 h-4 text-gold-500 shrink-0" /> Baltimore City, USA
               </div>
             </div>
 

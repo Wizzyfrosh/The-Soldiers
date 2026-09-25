@@ -33,6 +33,17 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
+    if (response.status === 502 || response.status === 504) {
+      throw new Error('Backend server is unreachable (port 5000). Please start the full server using "npm run dev:all".');
+    }
+    if (
+      response.status === 401 ||
+      (response.status === 403 && typeof errorData.error === 'string' && errorData.error.toLowerCase().includes('token'))
+    ) {
+      setAuthToken(null);
+      localStorage.removeItem('sjc_current_user');
+      throw new Error('Your admin session has expired or is invalid. Please log in again to continue.');
+    }
     throw new Error(errorData.error || `Request failed with status ${response.status}`);
   }
 
@@ -176,6 +187,17 @@ export const api = {
         method: 'POST',
         body: JSON.stringify(data)
       });
+    },
+    update: async (id: string, data: Partial<Donation>) => {
+      return request<{ message: string; donation: Donation }>(`/donations/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data)
+      });
+    },
+    delete: async (id: string) => {
+      return request<{ message: string }>(`/donations/${id}`, {
+        method: 'DELETE'
+      });
     }
   },
 
@@ -286,7 +308,7 @@ export const api = {
     getById: async (id: string) => {
       return request<{ testimony: Testimony }>(`/testimonies/${id}`);
     },
-    create: async (data: { title: string; content: string; image: string }) => {
+    create: async (data: { title: string; content: string; image: string; name?: string }) => {
       return request<{ message: string; testimony: Testimony }>('/testimonies', {
         method: 'POST',
         body: JSON.stringify(data)

@@ -70,7 +70,7 @@ export const PrayerRequest: React.FC<PrayerRequestProps> = ({ onSuccess }) => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="p-4 bg-navy-900 text-white rounded-xl text-xs space-y-1">
                   <span className="font-bold text-gold-400 uppercase">Confidentiality Guarantee</span>
-                  <p className="text-slate-300">You can choose whether your prayer request is kept strictly confidential with Pastor David or shared with our trusted intercessory team.</p>
+                  <p className="text-slate-300">You can choose whether your prayer request is kept strictly confidential with Prophet Ebelechukwu or shared with our trusted intercessory team.</p>
                 </div>
 
                 <div>

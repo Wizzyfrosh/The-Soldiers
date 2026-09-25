@@ -22,7 +22,7 @@ contentRouter.get('/', async (req, res) => {
           seasonalSubheadline: 'Going all-in on community, connection, and spiritual breakthrough every single Sunday.',
           seasonalBody: "This season, we are calling you back home—and into purpose. Discover where you fit in ministry. Get involved in small groups, prayer watch, and community outreach. Let's grow stronger together as one family in Christ!",
           sundayServiceTime: 'SUNDAYS AT 10:00 AM',
-          address: '1709 John Barrow Rd. Little Rock, AR 72204',
+          address: 'Baltimore City, USA',
           phone: '(501) 555-0199',
           email: 'info@soldiersofjesuschrist.org'
         }
@@ -75,7 +75,7 @@ contentRouter.put('/', authenticateToken, requireRole(['SUPER_ADMIN', 'EDITOR'])
         seasonalSubheadline: seasonalSubheadline || 'Join us this season',
         seasonalBody: seasonalBody || 'Welcome home to the Soldiers family.',
         sundayServiceTime: sundayServiceTime || 'SUNDAYS AT 10:00 AM',
-        address: address || '1709 John Barrow Rd. Little Rock, AR 72204',
+        address: address || 'Baltimore City, USA',
         phone: phone || '(501) 555-0199',
         email: email || 'info@soldiersofjesuschrist.org'
       }

@@ -66,9 +66,9 @@ export const AdminUsers: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-black uppercase font-display text-navy-950">User Access & Role-Based Permissions (RBAC)</h2>
+          <h2 className="text-xl sm:text-2xl font-black uppercase font-display text-navy-950">User Access & Role-Based Permissions (RBAC)</h2>
           <p className="text-xs text-slate-500">Manage administrator privileges: Super Admin, Editor, or Viewer.</p>
         </div>
         <Button variant="gold" size="md" onClick={() => setShowInviteModal(true)} icon={<UserPlus className="w-4 h-4" />}>
@@ -76,54 +76,56 @@ export const AdminUsers: React.FC = () => {
         </Button>
       </div>
 
-      {/* Users Table */}
-      <div className="bg-white rounded-2xl border-2 border-slate-200 overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
-            <tr>
-              <th className="p-4">User Name</th>
-              <th className="p-4">Email</th>
-              <th className="p-4">Role Badge</th>
-              <th className="p-4">Permissions Scope</th>
-              <th className="p-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 text-slate-700">
-            {usersList.map((u) => (
-              <tr key={u.id} className="hover:bg-slate-50">
-                <td className="p-4 font-bold text-navy-950 text-sm">{u.name}</td>
-                <td className="p-4">{u.email}</td>
-                <td className="p-4">
-                  <span className={`px-2.5 py-1 rounded font-black text-[10px] uppercase ${
-                    u.role === 'SUPER_ADMIN'
-                      ? 'bg-gold-500 text-navy-950 shadow-sm'
-                      : u.role === 'EDITOR'
-                      ? 'bg-navy-900 text-gold-400'
-                      : 'bg-slate-200 text-slate-700'
-                  }`}>
-                    {u.role}
-                  </span>
-                </td>
-                <td className="p-4 text-xs text-slate-500">
-                  {u.role === 'SUPER_ADMIN' && 'Full Access (Financials, Users, Content, Events, Sermons)'}
-                  {u.role === 'EDITOR' && 'Manage Sermons, Events, and CMS Content'}
-                  {u.role === 'VIEWER' && 'Read-Only Access to Inbox & Analytics'}
-                </td>
-                <td className="p-4 text-right">
-                  {u.role !== 'SUPER_ADMIN' && (
-                    <button
-                      onClick={() => handleDelete(u.id, u.name)}
-                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Revoke access"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  )}
-                </td>
+      {/* Users Table Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs min-w-[800px]">
+            <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
+              <tr>
+                <th className="p-4">User Name</th>
+                <th className="p-4">Email</th>
+                <th className="p-4">Role Badge</th>
+                <th className="p-4">Permissions Scope</th>
+                <th className="p-4 text-right sticky right-0 bg-navy-900 z-10">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-slate-700">
+              {usersList.map((u) => (
+                <tr key={u.id} className="group hover:bg-slate-50 transition-colors">
+                  <td className="p-4 font-bold text-navy-950 text-sm">{u.name}</td>
+                  <td className="p-4">{u.email}</td>
+                  <td className="p-4">
+                    <span className={`px-2.5 py-1 rounded font-black text-[10px] uppercase ${
+                      u.role === 'SUPER_ADMIN'
+                        ? 'bg-gold-500 text-navy-950 shadow-sm'
+                        : u.role === 'EDITOR'
+                        ? 'bg-navy-800 text-gold-400'
+                        : 'bg-slate-200 text-slate-700'
+                    }`}>
+                      {u.role.replace('_', ' ')}
+                    </span>
+                  </td>
+                  <td className="p-4 text-slate-500">
+                    {u.role === 'SUPER_ADMIN' && 'Full system control, financials, user invites & deletions.'}
+                    {u.role === 'EDITOR' && 'Publish and update sermons, news, events & prayer requests.'}
+                    {u.role === 'VIEWER' && 'Read-only access to submissions and event lists.'}
+                  </td>
+                  <td className="p-4 text-right sticky right-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[-8px_0_12px_-4px_rgba(0,0,0,0.06)]">
+                    {u.email !== 'admin@soldiers.org' && (
+                      <button
+                        onClick={() => handleDelete(u.id, u.name)}
+                        className="p-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-rose-200"
+                        title="Revoke User Access"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Invite Modal */}
@@ -146,10 +148,10 @@ export const AdminUsers: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Email</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Email Address</label>
                 <input
                   type="email"
-                  placeholder="marcus@soldiers.org"
+                  placeholder="pastor@soldiers.org"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-3.5 py-2 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm"
@@ -158,24 +160,35 @@ export const AdminUsers: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Assign RBAC Role</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Temporary Password</label>
+                <input
+                  type="text"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3.5 py-2 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Role Assignment</label>
                 <select
                   value={role}
-                  onChange={(e: any) => setRole(e.target.value)}
+                  onChange={(e) => setRole(e.target.value as Role)}
                   className="w-full px-3.5 py-2 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm"
                 >
-                  <option value="SUPER_ADMIN">SUPER_ADMIN (Full Control)</option>
-                  <option value="EDITOR">EDITOR (Manage Content & Events)</option>
-                  <option value="VIEWER">VIEWER (Read-Only Inbox Access)</option>
+                  <option value="SUPER_ADMIN">Super Admin (Full Access + Financials)</option>
+                  <option value="EDITOR">Editor (Sermons, News, Events Content)</option>
+                  <option value="VIEWER">Viewer (Read-only)</option>
                 </select>
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-3 border-t border-navy-800">
                 <Button type="button" variant="outline" size="md" className="flex-1" onClick={() => setShowInviteModal(false)}>
                   Cancel
                 </Button>
-                <Button type="submit" variant="gold" size="md" className="flex-1">
-                  Send Invitation
+                <Button type="submit" variant="gold" size="md" className="flex-1" disabled={loading}>
+                  {loading ? 'Sending...' : 'Issue Access'}
                 </Button>
               </div>
             </form>

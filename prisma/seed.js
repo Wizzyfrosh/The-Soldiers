@@ -20,16 +20,16 @@ async function main() {
     update: {
       password: adminPasswordHash,
       role: 'SUPER_ADMIN',
-      name: 'Pastor David Vance',
-      avatarUrl: '/images/pastor.jpg'
+      name: 'Prophet Ebelechukwu Elochukwu',
+      avatarUrl: '/images/bishop.png'
     },
     create: {
       id: 'u-admin-1',
-      name: 'Pastor David Vance',
+      name: 'Prophet Ebelechukwu Elochukwu',
       email: 'admin@soldiersofjesuschrist.org',
       password: adminPasswordHash,
       role: 'SUPER_ADMIN',
-      avatarUrl: '/images/pastor.jpg'
+      avatarUrl: '/images/bishop.png'
     }
   });
 
@@ -83,7 +83,7 @@ async function main() {
       seasonalSubheadline: 'Going all-in on community, connection, and spiritual breakthrough every single Sunday.',
       seasonalBody: "This season, we are calling you back home—and into purpose. Discover where you fit in ministry. Get involved in small groups, prayer watch, and community outreach. Let's grow stronger together as one family in Christ!",
       sundayServiceTime: 'SUNDAYS AT 10:00 AM',
-      address: '1709 John Barrow Rd. Little Rock, AR 72204',
+      address: 'Baltimore City, USA',
       phone: '(501) 555-0199',
       email: 'info@soldiersofjesuschrist.org'
     }
@@ -161,7 +161,7 @@ async function main() {
       id: 'ser-1',
       title: 'Putting On The Whole Armor of God',
       youtubeId: 'Lw8jG2nOQp8',
-      speaker: 'Pastor David Vance',
+      speaker: 'Prophet Ebelechukwu Elochukwu',
       series: 'Spiritual Warfare 101',
       date: '2026-09-13',
       featured: true,
@@ -172,7 +172,7 @@ async function main() {
       id: 'ser-2',
       title: 'Unshakable Faith in Troubled Times',
       youtubeId: 'kJQP7kiw5Fk',
-      speaker: 'Pastor David Vance',
+      speaker: 'Prophet Ebelechukwu Elochukwu',
       series: 'Standing Firm',
       date: '2026-09-06',
       featured: true,
@@ -309,7 +309,7 @@ async function main() {
     {
       id: 'news-1',
       title: 'Grand Opening of the Community Outreach Center',
-      content: 'We are thrilled to announce the opening of our new Outreach Center at 1709 John Barrow Rd. Designed to serve families across Little Rock with emergency food distribution, clothes closet, and spiritual counseling. Join us this Saturday at 11:00 AM for the ribbon-cutting ceremony and thanksgiving worship!',
+      content: 'We are thrilled to announce the opening of our new Outreach Center in Baltimore City. Designed to serve families across Baltimore with emergency food distribution, clothes closet, and spiritual counseling. Join us this Saturday at 11:00 AM for the ribbon-cutting ceremony and thanksgiving worship!',
       image: '/images/worship_hero.jpg'
     },
     {

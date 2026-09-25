@@ -115,12 +115,12 @@ export const Home: React.FC<HomeProps> = ({
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-navy-900 group">
                 <img
                   src="/images/bishop.png"
-                  alt="Bishop Ebelechukwu Elochukwu"
+                  alt="Prophet Ebelechukwu Elochukwu"
                   className="w-full h-[450px] object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-transparent to-transparent p-6 flex flex-col justify-end">
-                  <span className="text-gold-400 font-bold text-xs uppercase tracking-widest">Lead Pastor</span>
-                  <h4 className="text-xl font-extrabold text-white uppercase font-display">Bishop Ebelechukwu Elochukwu</h4>
+                  <span className="text-gold-400 font-bold text-xs uppercase tracking-widest">Lead Pastor & Prophet</span>
+                  <h4 className="text-xl font-extrabold text-white uppercase font-display">Prophet Ebelechukwu Elochukwu</h4>
                   <p className="text-xs text-slate-300">"We invite you to step into the fullness of God's calling."</p>
                 </div>
               </div>
@@ -352,7 +352,7 @@ export const Home: React.FC<HomeProps> = ({
                 <div className="h-[380px] sm:h-[420px] rounded-2xl overflow-hidden border border-white/40 shadow-xl relative group">
                   <iframe
                     title="Church Location Map"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d104928.34791350478!2d-92.38573199999999!3d34.7464809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87d2a138084a7e93%3A0x6b5a38ef2f9a120!2sLittle%20Rock%2C%20AR!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d197669.96738980186!2d-76.74505051886193!3d39.28482109403867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c803aed6f483b7%3A0x44896a84223e758!2sBaltimore%2C%20MD%2C%20USA!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
                     className="w-full h-full border-0 group-hover:brightness-105 transition-all"
                     loading="lazy"
                   ></iframe>
@@ -363,7 +363,7 @@ export const Home: React.FC<HomeProps> = ({
                       <MapPin className="w-4 h-4 text-gold-500" />
                       <span>Soldiers of Jesus Christ Sanctuary</span>
                     </div>
-                    <p className="text-xs text-slate-600">1709 John Barrow Rd, Little Rock, AR 72204</p>
+                    <p className="text-xs text-slate-600">Baltimore City, USA</p>
                   </div>
                 </div>
               </FadeIn>

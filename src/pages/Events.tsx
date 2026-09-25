@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Ticket } from 'lucide-react';
 import { store } from '../data/store';
 import { ChurchEvent } from '../types';

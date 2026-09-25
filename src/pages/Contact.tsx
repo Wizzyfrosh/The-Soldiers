@@ -71,7 +71,7 @@ export const Contact: React.FC<ContactProps> = ({ onSuccess }) => {
                   </div>
                   <div>
                     <h4 className="font-bold text-white font-display uppercase text-sm">Sanctuary Address</h4>
-                    <p className="text-xs text-slate-300 mt-0.5">1709 John Barrow Rd, Little Rock, AR 72204</p>
+                    <p className="text-xs text-slate-300 mt-0.5">Baltimore City, USA</p>
                   </div>
                 </div>
 

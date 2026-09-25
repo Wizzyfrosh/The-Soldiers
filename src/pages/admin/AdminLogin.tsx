@@ -11,6 +11,13 @@ export const AdminLogin: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // If already authenticated, redirect to /admin/dashboard immediately
+  React.useEffect(() => {
+    if (store.isAuthenticated()) {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);

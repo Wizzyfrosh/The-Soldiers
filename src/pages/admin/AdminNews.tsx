@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Newspaper, Plus, Trash2, Upload, Calendar, Eye, Image as ImageIcon } from 'lucide-react';
+import { Newspaper, Plus, Trash2, Upload, Calendar, Eye, Image as ImageIcon, X } from 'lucide-react';
 import { store } from '../../data/store';
 import { NewsItem } from '../../types';
 import { Button } from '../../components/common/Button';
@@ -51,6 +51,7 @@ export const AdminNews: React.FC = () => {
       setTitle('');
       setContent('');
       setImageUrl('/images/worship_hero.jpg');
+      setNewsList(store.getNews());
     } catch (err: any) {
       alert(err.message || 'Failed to create news article.');
     } finally {
@@ -59,7 +60,7 @@ export const AdminNews: React.FC = () => {
   };
 
   const handleDelete = async (id: string, itemTitle: string) => {
-    if (!confirm(`Are you sure you want to delete "${itemTitle}"?`)) return;
+    if (!confirm(`Are you sure you want to permanently delete "${itemTitle}"?`)) return;
     await store.deleteNews(id);
     setNewsList(store.getNews());
   };
@@ -70,7 +71,7 @@ export const AdminNews: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-black uppercase font-display text-navy-950">Latest News Manager</h2>
+          <h2 className="text-xl sm:text-2xl font-black uppercase font-display text-navy-950">Latest News Manager</h2>
           <p className="text-xs text-slate-500">Publish and manage official church announcements, reports, and articles.</p>
         </div>
         <Button
@@ -83,77 +84,81 @@ export const AdminNews: React.FC = () => {
         </Button>
       </div>
 
-      {/* News Articles Table */}
-      <div className="bg-white rounded-2xl border-2 border-slate-200 overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
-            <tr>
-              <th className="p-4">Thumbnail</th>
-              <th className="p-4">Article Title</th>
-              <th className="p-4">Date Published</th>
-              <th className="p-4">Excerpt / Preview</th>
-              <th className="p-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 text-slate-700">
-            {newsList.length === 0 ? (
+      {/* News Articles Table Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs min-w-[800px]">
+            <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
               <tr>
-                <td colSpan={5} className="p-8 text-center text-slate-400 font-medium">
-                  No news articles published yet. Click "Create News Article" to post your first update.
-                </td>
+                <th className="p-4 w-20">Thumbnail</th>
+                <th className="p-4">Article Title</th>
+                <th className="p-4">Date Published</th>
+                <th className="p-4">Excerpt / Preview</th>
+                <th className="p-4 text-right sticky right-0 bg-navy-900 z-10">Actions</th>
               </tr>
-            ) : (
-              newsList.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="p-4">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-16 h-12 rounded-lg object-cover border border-slate-200"
-                    />
-                  </td>
-                  <td className="p-4 font-bold text-navy-950 text-sm max-w-xs truncate">
-                    {item.title}
-                  </td>
-                  <td className="p-4 text-slate-500 whitespace-nowrap">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5 text-gold-600" />
-                      {new Date(item.createdAt || Date.now()).toLocaleDateString()}
-                    </div>
-                  </td>
-                  <td className="p-4 max-w-sm truncate text-slate-600">
-                    {item.content}
-                  </td>
-                  <td className="p-4 text-right whitespace-nowrap">
-                    <button
-                      onClick={() => handleDelete(item.id, item.title)}
-                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                      title="Delete article"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-slate-700">
+              {newsList.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-slate-400 font-medium">
+                    No news articles published yet. Click "Create News Article" to post church updates.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                newsList.map((item) => (
+                  <tr key={item.id} className="group hover:bg-slate-50 transition-colors">
+                    <td className="p-4">
+                      <img
+                        src={item.image || '/images/worship_hero.jpg'}
+                        alt={item.title}
+                        className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-sm shrink-0"
+                      />
+                    </td>
+                    <td className="p-4 font-bold text-navy-950 text-sm">
+                      {item.title}
+                    </td>
+                    <td className="p-4 font-mono text-slate-500">
+                      {item.createdAt ? item.createdAt.split('T')[0] : 'Recent'}
+                    </td>
+                    <td className="p-4 text-slate-600 max-w-xs">
+                      <p className="line-clamp-2">{item.content}</p>
+                    </td>
+                    <td className="p-4 text-right sticky right-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[-8px_0_12px_-4px_rgba(0,0,0,0.06)]">
+                      <button
+                        onClick={() => handleDelete(item.id, item.title)}
+                        className="p-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-rose-200"
+                        title="Delete article"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Create News Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-md">
           <div className="bg-navy-900 text-white rounded-2xl max-w-2xl w-full p-6 border-2 border-gold-500/40 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-            <h3 className="font-black text-lg uppercase font-display text-white">Publish New Article</h3>
+            <div className="flex items-center justify-between border-b border-navy-800 pb-3">
+              <h3 className="font-black text-lg uppercase font-display text-white">Publish New Article</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-1 rounded-lg">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
             <form onSubmit={handleCreateNews} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Article Title
+                  Article Title *
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g., Grand Opening of the Outreach Center"
+                  placeholder="e.g. Annual Holy Ghost Convention Announced"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
@@ -161,68 +166,56 @@ export const AdminNews: React.FC = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Article Full Content
-                </label>
-                <textarea
-                  rows={6}
-                  placeholder="Write the complete news announcement or story here..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 leading-relaxed"
-                  required
-                ></textarea>
-              </div>
-
-              {/* Image Upload Field */}
+              {/* Photo Upload */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
                   Featured Cover Image
                 </label>
-                <div className="flex flex-col sm:flex-row items-center gap-4">
-                  {imageUrl && (
-                    <img
-                      src={imageUrl}
-                      alt="Preview"
-                      className="w-28 h-20 rounded-xl object-cover border-2 border-gold-500/50 shrink-0"
-                    />
-                  )}
-                  <div className="flex-1 w-full space-y-2">
-                    <div className="flex items-center gap-2">
-                      <label className="cursor-pointer px-4 py-2 bg-navy-800 border border-navy-700 hover:border-gold-500 rounded-xl text-xs font-bold uppercase text-gold-400 hover:text-white transition-all flex items-center gap-2">
-                        <Upload className="w-4 h-4" />
-                        <span>{uploading ? 'Uploading...' : 'Upload Image File'}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                          disabled={uploading}
-                        />
-                      </label>
-                      <span className="text-[11px] text-slate-400">or paste image URL below</span>
-                    </div>
+                <div className="flex items-center gap-4 bg-navy-950/60 p-3 rounded-xl border border-navy-800">
+                  <img
+                    src={imageUrl}
+                    alt="Preview"
+                    className="w-16 h-16 rounded-xl object-cover border border-gold-500/40 shrink-0"
+                  />
+                  <div className="flex-1 space-y-2">
+                    <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 bg-navy-800 border border-navy-700 hover:border-gold-500 rounded-lg text-xs font-bold text-slate-300 hover:text-white">
+                      <ImageIcon className="w-3.5 h-3.5" />
+                      <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                        disabled={uploading}
+                      />
+                    </label>
                     <input
                       type="text"
-                      placeholder="https://... or /images/..."
+                      placeholder="/images/... or https://..."
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full px-3.5 py-2 bg-navy-950 border border-navy-700 rounded-xl text-white text-xs"
-                      required
+                      className="w-full px-3 py-1.5 bg-navy-950 border border-navy-700 rounded-lg text-white text-xs"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4 border-t border-navy-800">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="md"
-                  className="flex-1"
-                  onClick={() => setShowModal(false)}
-                >
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+                  Article Content *
+                </label>
+                <textarea
+                  rows={5}
+                  placeholder="Write full article body text..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
+                  required
+                ></textarea>
+              </div>
+
+              <div className="flex gap-3 pt-3 border-t border-navy-800">
+                <Button type="button" variant="outline" size="md" className="flex-1" onClick={() => setShowModal(false)}>
                   Cancel
                 </Button>
                 <Button
@@ -230,7 +223,7 @@ export const AdminNews: React.FC = () => {
                   variant="gold"
                   size="md"
                   className="flex-1"
-                  disabled={submitting || uploading}
+                  disabled={uploading || submitting}
                 >
                   {submitting ? 'Publishing...' : 'Publish Article'}
                 </Button>

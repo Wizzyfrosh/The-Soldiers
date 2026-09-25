@@ -26,7 +26,7 @@ export const AdminDashboard: React.FC = () => {
       <div className="bg-navy-900 text-white p-8 rounded-2xl border-2 border-gold-500/40 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-1">
           <span className="text-gold-400 font-extrabold text-xs uppercase tracking-widest">DASHBOARD OVERVIEW</span>
-          <h2 className="text-2xl md:text-3xl font-black uppercase font-display">Welcome Back, Pastor David</h2>
+          <h2 className="text-2xl md:text-3xl font-black uppercase font-display">Welcome Back, Prophet Ebelechukwu</h2>
           <p className="text-xs text-slate-300">Here is what's happening across the Soldiers of Jesus Christ ministry today.</p>
         </div>
         <div className="flex gap-3">

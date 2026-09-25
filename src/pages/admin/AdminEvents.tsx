@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Download, Calendar, MapPin, Users, Upload, Trash2, Image as ImageIcon, X } from 'lucide-react';
+import { Plus, Download, Calendar, MapPin, Users, Upload, Trash2, Edit3, Image as ImageIcon, X } from 'lucide-react';
 import { store } from '../../data/store';
 import { ChurchEvent } from '../../types';
 import { Button } from '../../components/common/Button';
@@ -8,6 +8,7 @@ import { api } from '../../services/api';
 export const AdminEvents: React.FC = () => {
   const [events, setEvents] = useState<ChurchEvent[]>(store.getEvents());
   const [showModal, setShowModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<ChurchEvent | null>(null);
 
   useEffect(() => {
     store.syncWithBackend();
@@ -28,6 +29,32 @@ export const AdminEvents: React.FC = () => {
   const [capacity, setCapacity] = useState('300');
   const [category, setCategory] = useState<'Worship' | 'Youth' | 'Community' | 'Men' | 'Women' | 'Conference'>('Worship');
 
+  const openCreateModal = () => {
+    setEditingEvent(null);
+    setTitle('');
+    setDescription('');
+    setDate('2026-10-03');
+    setTime('8:00 AM - 12:00 PM');
+    setLocation('Soldiers Main Sanctuary');
+    setImage('');
+    setCapacity('300');
+    setCategory('Worship');
+    setShowModal(true);
+  };
+
+  const openEditModal = (ev: ChurchEvent) => {
+    setEditingEvent(ev);
+    setTitle(ev.title);
+    setDescription(ev.description || '');
+    setDate(ev.date || '2026-10-03');
+    setTime(ev.time || '8:00 AM - 12:00 PM');
+    setLocation(ev.location || 'Soldiers Main Sanctuary');
+    setImage(ev.image || '');
+    setCapacity(String(ev.capacity || 300));
+    setCategory(ev.category || 'Worship');
+    setShowModal(true);
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -43,13 +70,13 @@ export const AdminEvents: React.FC = () => {
     }
   };
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title) return;
 
     setSubmitting(true);
     try {
-      await store.addEvent({
+      const eventData = {
         title,
         description,
         date,
@@ -59,15 +86,19 @@ export const AdminEvents: React.FC = () => {
         category,
         registrationRequired: true,
         capacity: capacity ? parseInt(capacity, 10) : 300
-      });
+      };
+
+      if (editingEvent) {
+        await store.updateEvent(editingEvent.id, eventData);
+      } else {
+        await store.addEvent(eventData);
+      }
 
       setShowModal(false);
-      setTitle('');
-      setDescription('');
-      setImage('');
-      setCapacity('300');
+      setEditingEvent(null);
+      setEvents(store.getEvents());
     } catch (err: any) {
-      alert(err.message || 'Failed to create event.');
+      alert(err.message || 'Failed to save event.');
     } finally {
       setSubmitting(false);
     }
@@ -77,6 +108,7 @@ export const AdminEvents: React.FC = () => {
     if (!confirm(`Are you sure you want to delete event "${eventTitle}"?`)) return;
     try {
       await store.deleteEvent(id);
+      setEvents(store.getEvents());
     } catch (err: any) {
       alert(err.message || 'Failed to delete event.');
     }
@@ -95,101 +127,114 @@ export const AdminEvents: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-black uppercase font-display text-navy-950">Event Manager</h2>
-          <p className="text-xs text-slate-500">Create events and export RSVP lists.</p>
+          <h2 className="text-xl sm:text-2xl font-black uppercase font-display text-navy-950">Event Manager</h2>
+          <p className="text-xs text-slate-500">Create, edit, manage events and export RSVP lists.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={handleExportCSV}
             className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-navy-950 font-bold text-xs uppercase rounded-xl flex items-center gap-1.5 transition-colors"
           >
             <Download className="w-4 h-4" /> Export CSV
           </button>
-          <Button variant="gold" size="md" onClick={() => setShowModal(true)} icon={<Plus className="w-4 h-4" />}>
+          <Button variant="gold" size="md" onClick={openCreateModal} icon={<Plus className="w-4 h-4" />}>
             Create New Event
           </Button>
         </div>
       </div>
 
-      {/* Events Table */}
-      <div className="bg-white rounded-2xl border-2 border-slate-200 overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
-            <tr>
-              <th className="p-4 w-16">Flyer</th>
-              <th className="p-4">Event Title</th>
-              <th className="p-4">Category</th>
-              <th className="p-4">Date & Time</th>
-              <th className="p-4">Location</th>
-              <th className="p-4 text-center">RSVPs</th>
-              <th className="p-4 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 text-slate-700">
-            {events.length === 0 ? (
+      {/* Events Table Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs min-w-[800px]">
+            <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
               <tr>
-                <td colSpan={7} className="p-8 text-center text-slate-400">
-                  No events found in the database. Click "Create New Event" above to schedule one.
-                </td>
+                <th className="p-4 w-16">Flyer</th>
+                <th className="p-4">Event Title</th>
+                <th className="p-4">Category</th>
+                <th className="p-4">Date & Time</th>
+                <th className="p-4">Location</th>
+                <th className="p-4 text-center">RSVPs</th>
+                <th className="p-4 text-right sticky right-0 bg-navy-900 z-10">Actions</th>
               </tr>
-            ) : (
-              events.map((ev) => (
-                <tr key={ev.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="p-4">
-                    {ev.image ? (
-                      <img
-                        src={ev.image}
-                        alt={ev.title}
-                        className="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 rounded-lg bg-navy-900/10 border border-navy-900/20 flex items-center justify-center text-navy-900">
-                        <ImageIcon className="w-5 h-5 opacity-40" />
-                      </div>
-                    )}
-                  </td>
-                  <td className="p-4">
-                    <div className="font-bold text-navy-950 text-sm">{ev.title}</div>
-                    <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">{ev.description}</div>
-                  </td>
-                  <td className="p-4">
-                    <span className="px-2.5 py-1 rounded-md font-black text-[10px] uppercase bg-navy-900 text-gold-400">
-                      {ev.category}
-                    </span>
-                  </td>
-                  <td className="p-4 font-mono font-medium text-slate-800">
-                    <div>{ev.date}</div>
-                    <div className="text-[11px] text-slate-500">{ev.time}</div>
-                  </td>
-                  <td className="p-4 text-slate-700">{ev.location}</td>
-                  <td className="p-4 text-center font-black text-gold-600 text-sm">
-                    {ev.registrationsCount}
-                    <span className="block text-[10px] font-normal text-slate-400">of {ev.capacity || 300} max</span>
-                  </td>
-                  <td className="p-4 text-right">
-                    <button
-                      onClick={() => handleDelete(ev.id, ev.title)}
-                      className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors"
-                      title="Delete Event"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-slate-700">
+              {events.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-400">
+                    No events found in the database. Click "Create New Event" above to schedule one.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                events.map((ev) => (
+                  <tr key={ev.id} className="group hover:bg-slate-50 transition-colors">
+                    <td className="p-4">
+                      {ev.image ? (
+                        <img
+                          src={ev.image}
+                          alt={ev.title}
+                          className="w-12 h-12 rounded-lg object-cover border border-slate-200 shadow-sm shrink-0"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-lg bg-navy-900/10 border border-navy-900/20 flex items-center justify-center text-navy-900 shrink-0">
+                          <ImageIcon className="w-5 h-5 opacity-40" />
+                        </div>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="font-bold text-navy-950 text-sm">{ev.title}</div>
+                      <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">{ev.description}</div>
+                    </td>
+                    <td className="p-4">
+                      <span className="px-2.5 py-1 rounded-md font-black text-[10px] uppercase bg-navy-900 text-gold-400">
+                        {ev.category}
+                      </span>
+                    </td>
+                    <td className="p-4 font-mono font-medium text-slate-800">
+                      <div>{ev.date}</div>
+                      <div className="text-[11px] text-slate-500">{ev.time}</div>
+                    </td>
+                    <td className="p-4 text-slate-700">{ev.location}</td>
+                    <td className="p-4 text-center font-black text-gold-600 text-sm">
+                      {ev.registrationsCount}
+                      <span className="block text-[10px] font-normal text-slate-400">of {ev.capacity || 300} max</span>
+                    </td>
+                    <td className="p-4 text-right sticky right-0 bg-white group-hover:bg-slate-50 transition-colors z-10 shadow-[-8px_0_12px_-4px_rgba(0,0,0,0.06)]">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => openEditModal(ev)}
+                          className="p-2 text-slate-600 hover:text-navy-950 hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200"
+                          title="Edit Event"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(ev.id, ev.title)}
+                          className="p-2 text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-200"
+                          title="Delete Event"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Create Event Modal */}
+      {/* Create / Edit Event Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-md overflow-y-auto">
-          <div className="bg-navy-900 text-white rounded-2xl max-w-xl w-full p-6 border-2 border-gold-500/40 shadow-2xl space-y-4 my-8 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-navy-950/80 backdrop-blur-md overflow-y-auto">
+          <div className="bg-navy-900 text-white rounded-2xl max-w-xl w-full p-4 sm:p-6 border-2 border-gold-500/40 shadow-2xl space-y-4 my-8 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-navy-800 pb-3">
-              <h3 className="font-black text-lg uppercase font-display text-white">Create Church Event</h3>
+              <h3 className="font-black text-base sm:text-lg uppercase font-display text-white">
+                {editingEvent ? 'Edit Church Event' : 'Create Church Event'}
+              </h3>
               <button
                 onClick={() => setShowModal(false)}
                 className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-navy-800"
@@ -198,7 +243,7 @@ export const AdminEvents: React.FC = () => {
               </button>
             </div>
 
-            <form onSubmit={handleCreate} className="space-y-4">
+            <form onSubmit={handleSave} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Event Title *</label>
                 <input
@@ -260,7 +305,7 @@ export const AdminEvents: React.FC = () => {
                       placeholder="https://... or /images/..."
                       value={image}
                       onChange={(e) => setImage(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-navy-950 border border-navy-700 rounded-lg text-white text-xs placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-gold-500"
+                      className="w-full px-3 py-2 bg-navy-950 border border-navy-700 rounded-lg text-white text-xs"
                     />
                   </div>
                 </div>
@@ -271,19 +316,19 @@ export const AdminEvents: React.FC = () => {
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Category</label>
                   <select
                     value={category}
-                    onChange={(e: any) => setCategory(e.target.value)}
+                    onChange={(e) => setCategory(e.target.value as any)}
                     className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
                   >
-                    <option value="Worship">Worship</option>
-                    <option value="Youth">Youth</option>
-                    <option value="Community">Community</option>
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                    <option value="Conference">Conference</option>
+                    <option value="Worship">Worship Service</option>
+                    <option value="Conference">Conference / Revival</option>
+                    <option value="Community">Community / Outreach</option>
+                    <option value="Youth">Youth Ministry</option>
+                    <option value="Men">Men's Ministry</option>
+                    <option value="Women">Women's Ministry</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Capacity</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Capacity Limit</label>
                   <input
                     type="number"
                     value={capacity}
@@ -295,7 +340,7 @@ export const AdminEvents: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Date *</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Date</label>
                   <input
                     type="date"
                     value={date}
@@ -305,7 +350,7 @@ export const AdminEvents: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Time *</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Time Range</label>
                   <input
                     type="text"
                     placeholder="e.g. 8:00 AM - 12:00 PM"
@@ -318,10 +363,9 @@ export const AdminEvents: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Location *</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Location</label>
                 <input
                   type="text"
-                  placeholder="e.g. Soldiers Main Sanctuary"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
@@ -330,18 +374,17 @@ export const AdminEvents: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Description *</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">Description</label>
                 <textarea
                   rows={3}
-                  placeholder="Detailed description of the upcoming gathering..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
-                  required
+                  placeholder="Details about the event, what to bring, theme..."
                 ></textarea>
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-3 border-t border-navy-800">
                 <Button type="button" variant="outline" size="md" className="flex-1" onClick={() => setShowModal(false)}>
                   Cancel
                 </Button>
@@ -352,14 +395,13 @@ export const AdminEvents: React.FC = () => {
                   className="flex-1"
                   disabled={uploading || submitting}
                 >
-                  {submitting ? 'Creating Event...' : 'Create Event'}
+                  {submitting ? 'Saving...' : (editingEvent ? 'Update Event' : 'Schedule Event')}
                 </Button>
               </div>
             </form>
           </div>
         </div>
       )}
-
     </div>
   );
 };

@@ -2,7 +2,8 @@ import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 /**
- * NextAuth Middleware (middleware.ts)
+ * NextAuth Middleware (src/middleware.ts)
+ * Placed inside src/ so Next.js 14 correctly detects and executes it.
  *
  * Requirements:
  * 1. Blocks unauthenticated users from ALL /admin routes (including /admin/dashboard, /admin).
