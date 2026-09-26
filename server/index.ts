@@ -83,9 +83,11 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Soldiers of Jesus Christ Backend API running at http://localhost:${PORT}`);
-  console.log(`📡 Connected to Neon PostgreSQL Database via Prisma`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Soldiers of Jesus Christ Backend API running at http://localhost:${PORT}`);
+    console.log(`📡 Connected to Neon PostgreSQL Database via Prisma`);
+  });
+}
 
 export default app;
