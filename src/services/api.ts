@@ -36,13 +36,15 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     if (response.status === 502 || response.status === 504) {
       throw new Error('Backend server is unreachable (port 5000). Please start the full server using "npm run dev:all".');
     }
-    if (
-      response.status === 401 ||
-      (response.status === 403 && typeof errorData.error === 'string' && errorData.error.toLowerCase().includes('token'))
-    ) {
-      setAuthToken(null);
-      localStorage.removeItem('sjc_current_user');
-      throw new Error('Your admin session has expired or is invalid. Please log in again to continue.');
+    if (endpoint !== '/auth/login' && endpoint !== '/auth/register') {
+      if (
+        response.status === 401 ||
+        (response.status === 403 && typeof errorData.error === 'string' && errorData.error.toLowerCase().includes('token'))
+      ) {
+        setAuthToken(null);
+        localStorage.removeItem('sjc_current_user');
+        throw new Error('Your admin session has expired or is invalid. Please log in again to continue.');
+      }
     }
     throw new Error(errorData.error || `Request failed with status ${response.status}`);
   }
