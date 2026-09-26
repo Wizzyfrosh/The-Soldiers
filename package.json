@@ -7,10 +7,12 @@
     "dev": "vite",
     "server": "tsx server/index.ts",
     "dev:all": "concurrently -n \"SERVER,CLIENT\" -c \"magenta,cyan\" \"tsx server/index.ts\" \"vite\"",
-    "build": "tsc && vite build",
+    "build": "prisma generate && prisma db push && tsc && vite build",
+    "build:next": "prisma generate && prisma migrate deploy && next build",
     "lint": "tsc",
     "preview": "vite preview",
     "db:push": "prisma db push",
+    "db:deploy": "prisma migrate deploy",
     "db:generate": "prisma generate",
     "db:seed": "node prisma/seed.js"
   },

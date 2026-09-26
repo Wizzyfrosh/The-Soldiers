@@ -112,12 +112,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenGiveModal }) => {
             </div>
             <ul className="text-xs text-slate-300 space-y-1.5">
               <li>
-                <span className="font-bold text-white block">Sunday Celebration:</span>
-                <span className="text-slate-400">10:00 AM • Worship & The Word</span>
+                <span className="font-bold text-white block">Saturday service:</span>
+                <span className="text-slate-400">7:00 AM • Worship & The Word</span>
               </li>
               <li>
-                <span className="font-bold text-white block">Wednesday Prayer Watch:</span>
-                <span className="text-slate-400">7:00 PM • Intercessory Service</span>
+                <span className="font-bold text-white block">Wednesday Bible Study:</span>
+                <span className="text-slate-400">5:00 PM • Intercessory Service</span>
               </li>
             </ul>
             <div className="pt-2">

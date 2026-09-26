@@ -264,14 +264,163 @@ export const Home: React.FC<HomeProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
             {/* Left Collage */}
-            <FadeIn direction="left" className="lg:col-span-5">
+            <div className="lg:col-span-5">
               <div className="grid grid-cols-2 gap-3">
-                <img src="/images/worship_hero.jpg" alt="Summer worship" className="rounded-2xl shadow-xl h-44 w-full object-cover border-2 border-navy-950" />
-                <img src="/images/youth.jpg" alt="Summer youth" className="rounded-2xl shadow-xl h-44 w-full object-cover border-2 border-navy-950 mt-4" />
-                <img src="/images/womens.jpg" alt="Fellowship" className="rounded-2xl shadow-xl h-44 w-full object-cover border-2 border-navy-950 -mt-2" />
-                <img src="/images/mens.jpg" alt="Brotherhood" className="rounded-2xl shadow-xl h-44 w-full object-cover border-2 border-navy-950 mt-2" />
+                
+                {/* 1. Top-Left Image (Reveal order #1 - 0.0s delay) */}
+                <motion.div
+                  style={{ perspective: 1000 }}
+                  initial={{ opacity: 0, rotateY: 90, scale: 0.8 }}
+                  whileInView={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: 0.0, ease: "easeOut" }}
+                  className="relative z-1 hover:z-20"
+                >
+                  <motion.div
+                    animate={{
+                      y: [0, -10, 0, 10, 0],
+                      x: [0, 10, 0, -10, 0],
+                      rotateY: [0, 5, 0, -5, 0],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0,
+                    }}
+                    whileHover={{
+                      scale: 1.1,
+                      rotateY: 0,
+                      rotateX: 0,
+                      zIndex: 10,
+                      transition: { duration: 0.3, ease: "easeOut" },
+                    }}
+                    className="relative rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden border-2 border-navy-950 cursor-pointer"
+                  >
+                    <img
+                      src="/images/worship_hero.jpg"
+                      alt="Summer worship"
+                      className="h-44 w-full object-cover rounded-2xl"
+                    />
+                  </motion.div>
+                </motion.div>
+
+                {/* 2. Top-Right Image (Reveal order #3 - 0.30s delay) */}
+                <motion.div
+                  style={{ perspective: 1000 }}
+                  initial={{ opacity: 0, rotateY: 90, scale: 0.8 }}
+                  whileInView={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: 0.30, ease: "easeOut" }}
+                  className="relative mt-4 z-1 hover:z-20"
+                >
+                  <motion.div
+                    animate={{
+                      y: [0, -10, 0, 10, 0],
+                      x: [0, 10, 0, -10, 0],
+                      rotateY: [0, 5, 0, -5, 0],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 2.5,
+                    }}
+                    whileHover={{
+                      scale: 1.1,
+                      rotateY: 0,
+                      rotateX: 0,
+                      zIndex: 10,
+                      transition: { duration: 0.3, ease: "easeOut" },
+                    }}
+                    className="relative rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden border-2 border-navy-950 cursor-pointer"
+                  >
+                    <img
+                      src="/images/youth.jpg"
+                      alt="Summer youth"
+                      className="h-44 w-full object-cover rounded-2xl"
+                    />
+                  </motion.div>
+                </motion.div>
+
+                {/* 3. Bottom-Left Image (Reveal order #2 - 0.15s delay) */}
+                <motion.div
+                  style={{ perspective: 1000 }}
+                  initial={{ opacity: 0, rotateY: 90, scale: 0.8 }}
+                  whileInView={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+                  className="relative -mt-2 z-1 hover:z-20"
+                >
+                  <motion.div
+                    animate={{
+                      y: [0, -10, 0, 10, 0],
+                      x: [0, 10, 0, -10, 0],
+                      rotateY: [0, 5, 0, -5, 0],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 5.0,
+                    }}
+                    whileHover={{
+                      scale: 1.1,
+                      rotateY: 0,
+                      rotateX: 0,
+                      zIndex: 10,
+                      transition: { duration: 0.3, ease: "easeOut" },
+                    }}
+                    className="relative rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden border-2 border-navy-950 cursor-pointer"
+                  >
+                    <img
+                      src="/images/womens.jpg"
+                      alt="Fellowship"
+                      className="h-44 w-full object-cover rounded-2xl"
+                    />
+                  </motion.div>
+                </motion.div>
+
+                {/* 4. Bottom-Right Image (Reveal order #4 - 0.45s delay) */}
+                <motion.div
+                  style={{ perspective: 1000 }}
+                  initial={{ opacity: 0, rotateY: 90, scale: 0.8 }}
+                  whileInView={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
+                  className="relative mt-2 z-1 hover:z-20"
+                >
+                  <motion.div
+                    animate={{
+                      y: [0, -10, 0, 10, 0],
+                      x: [0, 10, 0, -10, 0],
+                      rotateY: [0, 5, 0, -5, 0],
+                    }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 7.5,
+                    }}
+                    whileHover={{
+                      scale: 1.1,
+                      rotateY: 0,
+                      rotateX: 0,
+                      zIndex: 10,
+                      transition: { duration: 0.3, ease: "easeOut" },
+                    }}
+                    className="relative rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden border-2 border-navy-950 cursor-pointer"
+                  >
+                    <img
+                      src="/images/mens.jpg"
+                      alt="Brotherhood"
+                      className="h-44 w-full object-cover rounded-2xl"
+                    />
+                  </motion.div>
+                </motion.div>
+
               </div>
-            </FadeIn>
+            </div>
 
             {/* Right Copy */}
             <FadeIn direction="right" delay={0.2} className="lg:col-span-7">

@@ -134,7 +134,7 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
   const handleSecondaryClick = currentSlide.ctaSecondaryAction || onWatchSermon || onSelectSermon;
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
+    <section className="relative h-[70vh] md:h-screen w-full overflow-hidden bg-black">
       <AnimatePresence mode="popLayout">
         <motion.div
           key={activeSlideIndex}
@@ -148,24 +148,24 @@ export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
             exit="exit"
             className="absolute inset-0 h-full w-full"
           >
-            <img
+            <motion.img
               src={currentSlide.image}
               alt={currentSlide.headline}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover object-[70%_center] md:object-center"
             />
-            {/* Subtle gradient overlay: bottom-to-top on mobile, left-to-right dark gradient on desktop */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/20 md:bg-gradient-to-r md:from-black/70 md:via-black/30 md:to-transparent" />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
           </motion.div>
 
-          {/* Left-Aligned Text Content Container (Centered on Mobile) */}
+          {/* Text Content Container (Centered on Mobile with px-4, Left-Aligned on Desktop with max-w-xl) */}
           <div className="relative z-10 flex h-full w-full items-center">
-            <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24">
+            <div className="w-full px-4 sm:px-12 md:px-16 lg:px-24">
               <motion.div
                 variants={textVariants}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                className="flex max-w-xl flex-col items-center text-center md:items-start md:text-left"
+                className="mx-auto flex max-w-xl flex-col items-center text-center md:mx-0 md:items-start md:text-left"
               >
                 {/* Optional Badge */}
                 {currentSlide.badge && (
