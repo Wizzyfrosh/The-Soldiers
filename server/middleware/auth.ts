@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'sjc_church_super_secret_jwt_key_2026_change_in_production';
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('FATAL: JWT_SECRET or NEXTAUTH_SECRET environment variable is required. Server cannot start without it.');
+}
 
 export interface AuthenticatedUser {
   id: string;

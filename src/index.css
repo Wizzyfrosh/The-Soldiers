@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+}
+
 @layer utilities {
   @keyframes marquee {
     0% { transform: translateX(0%); }

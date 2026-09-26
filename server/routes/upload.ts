@@ -3,6 +3,7 @@ import multer, { MulterError } from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { v2 as cloudinary } from 'cloudinary';
 
 export const uploadRouter = Router();
 
@@ -15,7 +16,26 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Multer Storage Configuration
+// Check if Cloudinary credentials are provided in environment variables
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+const isCloudinaryConfigured = Boolean(cloudName && apiKey && apiSecret);
+
+if (isCloudinaryConfigured) {
+  cloudinary.config({
+    cloud_name: cloudName,
+    api_key: apiKey,
+    api_secret: apiSecret,
+    secure: true
+  });
+  console.log('⚡ Cloudinary Media Storage active');
+} else {
+  console.log('ℹ️ Cloudinary credentials not detected. Uploads will use local disk storage (/public/uploads)');
+}
+
+// Multer Storage Configuration (used locally and as temp buffer for Cloudinary)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -70,20 +90,53 @@ const handleUpload = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // POST /api/upload (Single file upload)
-uploadRouter.post('/', handleUpload, (req: Request, res: Response) => {
+uploadRouter.post('/', handleUpload, async (req: Request, res: Response) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file was provided for upload.' });
     }
 
+    // 1. Cloudinary upload if configured
+    if (isCloudinaryConfigured) {
+      try {
+        const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+          folder: 'soldiers_church_uploads',
+          resource_type: 'auto'
+        });
+
+        // Clean up temporary local file
+        if (fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+
+        return res.status(201).json({
+          message: 'File uploaded successfully to Cloudinary.',
+          url: uploadResult.secure_url,
+          public_id: uploadResult.public_id,
+          filename: req.file.filename,
+          mimetype: req.file.mimetype,
+          size: req.file.size,
+          provider: 'cloudinary'
+        });
+      } catch (cloudError: any) {
+        console.error('Cloudinary upload error:', cloudError);
+        if (fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+        return res.status(500).json({ error: `Cloudinary storage error: ${cloudError.message}` });
+      }
+    }
+
+    // 2. Local disk storage fallback
     const fileUrl = `/uploads/${req.file.filename}`;
 
     return res.status(201).json({
-      message: 'File uploaded successfully.',
+      message: 'File uploaded successfully to local storage.',
       url: fileUrl,
       filename: req.file.filename,
       mimetype: req.file.mimetype,
-      size: req.file.size
+      size: req.file.size,
+      provider: 'local'
     });
   } catch (error: any) {
     console.error('File upload controller error:', error);

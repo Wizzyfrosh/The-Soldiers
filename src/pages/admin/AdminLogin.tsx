@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cross, Lock, Mail, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Cross, Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 import { api } from '../../services/api';
 import { store } from '../../data/store';
 
@@ -34,11 +34,6 @@ export const AdminLogin: React.FC = () => {
     }
   };
 
-  const handleFillCredentials = (demoEmail: string, demoPass: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError(null);
-  };
 
   return (
     <div className="min-h-screen bg-navy-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -88,7 +83,7 @@ export const AdminLogin: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-4 py-3 bg-navy-950 border border-navy-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm transition-all"
-                  placeholder="admin@soldiersofjesuschrist.org"
+                  placeholder="Enter your email address"
                 />
               </div>
             </div>
@@ -129,35 +124,6 @@ export const AdminLogin: React.FC = () => {
             </button>
           </form>
 
-          {/* Quick Demo Credentials Switcher */}
-          <div className="mt-8 pt-6 border-t border-navy-800">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center mb-3">
-              Quick Switch Role Credentials
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-[11px]">
-              <button
-                type="button"
-                onClick={() => handleFillCredentials('admin@soldiersofjesuschrist.org', 'admin123')}
-                className="p-2.5 rounded-lg bg-navy-950/80 border border-navy-800 hover:border-gold-500/50 text-left transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-1 text-gold-400 font-bold">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Super Admin
-                </div>
-                <div className="text-slate-400 truncate mt-0.5">admin123</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleFillCredentials('editor@soldiersofjesuschrist.org', 'editor123')}
-                className="p-2.5 rounded-lg bg-navy-950/80 border border-navy-800 hover:border-gold-500/50 text-left transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-1 text-blue-400 font-bold">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Editor
-                </div>
-                <div className="text-slate-400 truncate mt-0.5">editor123</div>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

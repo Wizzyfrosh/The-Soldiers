@@ -57,7 +57,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       name: "Admin Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "admin@soldiersofjesuschrist.org" },
+        email: { label: "Email", type: "email", placeholder: "Enter your admin email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {

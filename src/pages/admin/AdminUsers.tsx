@@ -10,7 +10,7 @@ export const AdminUsers: React.FC = () => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('tempPass123!');
+  const [password, setPassword] = useState('');
   const [role, setRole] = useState<Role>('EDITOR');
   const [loading, setLoading] = useState(false);
 
@@ -31,21 +31,24 @@ export const AdminUsers: React.FC = () => {
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email) return;
+    if (!name || !email || !password) {
+      alert('Name, email, and a strong password are required.');
+      return;
+    }
     setLoading(true);
 
     try {
       await api.users.create({
         name,
         email,
-        password: password || 'Soldiers2026!',
+        password,
         role
       });
       await fetchUsers();
       setShowInviteModal(false);
       setName('');
       setEmail('');
-      setPassword('tempPass123!');
+      setPassword('');
     } catch (err: any) {
       alert(err.message || 'Failed to create user');
     } finally {

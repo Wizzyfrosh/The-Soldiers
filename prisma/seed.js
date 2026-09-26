@@ -9,10 +9,20 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('⚡ Initializing & Seeding Neon PostgreSQL Database with Prisma Client...');
 
-  // 1. Password Hashes
-  const adminPasswordHash = await bcrypt.hash('admin123', 10);
-  const editorPasswordHash = await bcrypt.hash('editor123', 10);
-  const viewerPasswordHash = await bcrypt.hash('viewer123', 10);
+  // 1. Password Hashes — Read from environment variables (NEVER hardcode passwords)
+  const adminPassword = process.env.ADMIN_SEED_PASSWORD;
+  const editorPassword = process.env.EDITOR_SEED_PASSWORD;
+  const viewerPassword = process.env.VIEWER_SEED_PASSWORD;
+
+  if (!adminPassword || !editorPassword || !viewerPassword) {
+    console.error('❌ Missing required seed password environment variables.');
+    console.error('   Set ADMIN_SEED_PASSWORD, EDITOR_SEED_PASSWORD, and VIEWER_SEED_PASSWORD in your .env file.');
+    process.exit(1);
+  }
+
+  const adminPasswordHash = await bcrypt.hash(adminPassword, 12);
+  const editorPasswordHash = await bcrypt.hash(editorPassword, 12);
+  const viewerPasswordHash = await bcrypt.hash(viewerPassword, 12);
 
   // 2. Seed Users
   await prisma.user.upsert({
@@ -68,7 +78,7 @@ async function main() {
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150'
     }
   });
-  console.log('✅ Admin Users Seeded (admin@soldiersofjesuschrist.org / admin123)');
+  console.log('✅ Admin Users Seeded Successfully (credentials from environment variables)');
 
   // 3. Seed Site Content Singleton
   await prisma.siteContent.upsert({

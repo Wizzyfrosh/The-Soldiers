@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { Toast, ToastMessage } from './components/common/Toast';
+import { ScrollToTop } from './components/common/ScrollToTop';
+import { PageLoader } from './components/common/PageLoader';
 
 // Modals
 import { GivingModal } from './components/modals/GivingModal';
@@ -80,6 +82,8 @@ export const App: React.FC = () => {
 
   return (
     <Router>
+      <PageLoader duration={8000} />
+      <ScrollToTop />
       <MainLayout onOpenGive={() => setIsGiveOpen(true)}>
         <Routes>
           {/* Public 20 Pages */}
