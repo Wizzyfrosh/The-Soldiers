@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Newspaper, Plus, Trash2, Upload, Calendar, Eye, Image as ImageIcon, X } from 'lucide-react';
+import { Plus, Trash2, X } from 'lucide-react';
 import { store } from '../../data/store';
 import { NewsItem } from '../../types';
-import { Button } from '../../components/common/Button';
-import { api } from '../../services/api';
+import { MediaUploader } from '../../components/admin/MediaUploader';
 
 export const AdminNews: React.FC = () => {
   const [newsList, setNewsList] = useState<NewsItem[]>(store.getNews());
-  const [showModal, setShowModal] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('/images/worship_hero.jpg');
-  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -21,33 +19,21 @@ export const AdminNews: React.FC = () => {
     });
   }, []);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    try {
-      const res = await api.upload.file(file);
-      setImageUrl(res.url);
-    } catch (err: any) {
-      alert(err.message || 'Image upload failed.');
-    } finally {
-      setUploading(false);
-    }
-  };
-
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !content || !imageUrl) return;
+    if (!title.trim() || !content.trim()) {
+      alert('Please fill in both article title and body content.');
+      return;
+    }
 
     setSubmitting(true);
     try {
       await store.addNews({
-        title,
-        content,
-        image: imageUrl
+        title: title.trim(),
+        content: content.trim(),
+        image: imageUrl.trim() || '/images/worship_hero.jpg'
       });
-      setShowModal(false);
+      setShowForm(false);
       setTitle('');
       setContent('');
       setImageUrl('/images/worship_hero.jpg');
@@ -61,33 +47,112 @@ export const AdminNews: React.FC = () => {
 
   const handleDelete = async (id: string, itemTitle: string) => {
     if (!confirm(`Are you sure you want to permanently delete "${itemTitle}"?`)) return;
-    await store.deleteNews(id);
-    setNewsList(store.getNews());
+    try {
+      await store.deleteNews(id);
+      setNewsList(store.getNews());
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete news article.');
+    }
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-6 w-full max-w-full">
+      {/* 2. Responsive Page Header: flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
         <div>
-          <h2 className="text-xl sm:text-2xl font-black uppercase font-display text-navy-950">Latest News Manager</h2>
-          <p className="text-xs text-slate-500">Publish and manage official church announcements, reports, and articles.</p>
+          <h2 className="text-xl sm:text-2xl font-black uppercase font-display text-navy-950 tracking-tight">
+            Latest News Manager
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Publish and manage official church announcements, reports, and community articles.
+          </p>
         </div>
-        <Button
-          variant="gold"
-          size="md"
-          onClick={() => setShowModal(true)}
-          icon={<Plus className="w-4 h-4" />}
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="w-full sm:w-auto px-6 py-3 bg-gold-400 hover:bg-gold-500 text-navy-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center gap-2 shrink-0 active:scale-95 cursor-pointer"
         >
-          Create News Article
-        </Button>
+          {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          <span>{showForm ? 'Close Form' : 'Publish News Article'}</span>
+        </button>
       </div>
 
+      {/* 2. Responsive Form Wrapper: w-full bg-white rounded-2xl shadow-sm p-6 md:p-8 without fixed height or overflow-y-auto */}
+      {showForm && (
+        <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6 transition-all">
+          <div className="border-b border-slate-200 pb-4">
+            <h3 className="text-lg font-black uppercase font-display text-navy-950">
+              Publish Church News Article
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Fill in the article title, featured photo cover, and complete story body.
+            </p>
+          </div>
+
+          <form onSubmit={handleCreateNews} className="space-y-5 w-full">
+            {/* Title */}
+            <div className="w-full space-y-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Article Title *
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Annual Holy Ghost Convention Announced"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900 focus:bg-white"
+                required
+              />
+            </div>
+
+            {/* Media Uploader for Cover Image */}
+            <MediaUploader
+              label="Featured Cover Image"
+              value={imageUrl}
+              onChange={(url) => setImageUrl(url)}
+              type="image"
+              placeholder="/images/... or https://... or click upload file"
+            />
+
+            {/* Content Textarea */}
+            <div className="w-full space-y-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Article Body Content *
+              </label>
+              <textarea
+                rows={6}
+                placeholder="Write the full article body text here..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-navy-900 focus:bg-white leading-relaxed"
+                required
+              />
+            </div>
+
+            {/* Form Actions: Buttons must be w-full sm:w-auto */}
+            <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-slate-200 w-full">
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="w-full sm:w-auto px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs uppercase rounded-xl transition-all cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full sm:w-auto px-8 py-3 bg-navy-950 hover:bg-navy-900 text-gold-400 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg border border-gold-500/30 cursor-pointer"
+              >
+                {submitting ? 'Publishing...' : 'Publish Article'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
       {/* News Articles Table Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs min-w-[800px]">
+      <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left text-xs min-w-[750px]">
             <thead className="bg-navy-900 text-gold-400 font-extrabold uppercase font-display">
               <tr>
                 <th className="p-4 w-20">Thumbnail</th>
@@ -101,7 +166,7 @@ export const AdminNews: React.FC = () => {
               {newsList.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center text-slate-400 font-medium">
-                    No news articles published yet. Click "Create News Article" to post church updates.
+                    No news articles published yet. Click "Publish News Article" to post church updates.
                   </td>
                 </tr>
               ) : (
@@ -139,100 +204,6 @@ export const AdminNews: React.FC = () => {
           </table>
         </div>
       </div>
-
-      {/* Create News Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-md">
-          <div className="bg-navy-900 text-white rounded-2xl max-w-2xl w-full p-6 border-2 border-gold-500/40 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-navy-800 pb-3">
-              <h3 className="font-black text-lg uppercase font-display text-white">Publish New Article</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-white p-1 rounded-lg">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateNews} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Article Title *
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Annual Holy Ghost Convention Announced"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
-                  required
-                />
-              </div>
-
-              {/* Photo Upload */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Featured Cover Image
-                </label>
-                <div className="flex items-center gap-4 bg-navy-950/60 p-3 rounded-xl border border-navy-800">
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="w-16 h-16 rounded-xl object-cover border border-gold-500/40 shrink-0"
-                  />
-                  <div className="flex-1 space-y-2">
-                    <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 bg-navy-800 border border-navy-700 hover:border-gold-500 rounded-lg text-xs font-bold text-slate-300 hover:text-white">
-                      <ImageIcon className="w-3.5 h-3.5" />
-                      <span>{uploading ? 'Uploading...' : 'Upload Image'}</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        disabled={uploading}
-                      />
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="/images/... or https://..."
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-navy-950 border border-navy-700 rounded-lg text-white text-xs"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                  Article Content *
-                </label>
-                <textarea
-                  rows={5}
-                  placeholder="Write full article body text..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-navy-950 border border-navy-700 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-gold-500"
-                  required
-                ></textarea>
-              </div>
-
-              <div className="flex gap-3 pt-3 border-t border-navy-800">
-                <Button type="button" variant="outline" size="md" className="flex-1" onClick={() => setShowModal(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  variant="gold"
-                  size="md"
-                  className="flex-1"
-                  disabled={uploading || submitting}
-                >
-                  {submitting ? 'Publishing...' : 'Publish Article'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };

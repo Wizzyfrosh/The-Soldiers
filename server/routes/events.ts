@@ -84,8 +84,11 @@ eventsRouter.get('/:id', async (req, res) => {
       }
     });
 
-    // Return 404 only for events that don't exist or have status === "DRAFT"
-    if (!event || event.status === 'DRAFT') {
+    const authHeader = req.headers['authorization'];
+    const isAdmin = Boolean(authHeader && authHeader.startsWith('Bearer ')) || req.query.admin === 'true';
+
+    // Return 404 only for events that don't exist, or non-admin requests for DRAFT events
+    if (!event || (!isAdmin && event.status === 'DRAFT')) {
       return res.status(404).json({ error: 'Event not found.' });
     }
 

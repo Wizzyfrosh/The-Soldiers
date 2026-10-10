@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../db.js';
 import { authenticateToken, AuthenticatedRequest, generateToken } from '../middleware/auth.js';
+import { fallback2FAUsers } from './two-factor.js';
 
 export const authRouter = Router();
 
@@ -122,6 +123,35 @@ authRouter.post('/login', async (req, res) => {
     clearAttempts(req);
 
     const safeUser = targetUser;
+
+    // Check if 2FA is enabled for this user
+    if (safeUser) {
+      let twoFactorSecret: string | null = null;
+      try {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: safeUser.id },
+          select: { twoFactorSecret: true }
+        });
+        twoFactorSecret = dbUser?.twoFactorSecret || null;
+      } catch (err) {
+        twoFactorSecret = fallback2FAUsers.get(safeUser.id)?.twoFactorSecret || null;
+      }
+
+      if (!twoFactorSecret) {
+        twoFactorSecret = fallback2FAUsers.get(safeUser.id)?.twoFactorSecret || null;
+      }
+
+      if (twoFactorSecret) {
+        // 2FA is enabled — don't issue a full token yet
+        return res.json({
+          message: '2FA verification required',
+          requires2FA: true,
+          userId: safeUser.id,
+          userName: safeUser.name
+        });
+      }
+    }
+
     const token = generateToken(safeUser);
 
     return res.json({
@@ -132,6 +162,88 @@ authRouter.post('/login', async (req, res) => {
   } catch (error: any) {
     console.error('Login error:', error);
     return res.status(500).json({ error: 'Internal server error during authentication.' });
+  }
+});
+
+// POST /api/auth/complete-2fa — Issue token after successful 2FA verification
+authRouter.post('/complete-2fa', async (req, res) => {
+  try {
+    const { userId, token } = req.body;
+    if (!userId || !token) {
+      return res.status(400).json({ error: 'User ID and 2FA code are required.' });
+    }
+
+    let user: any = null;
+    try {
+      user = await prisma.user.findUnique({ where: { id: userId } });
+    } catch (err) {}
+
+    if (!user) {
+      const mem = fallback2FAUsers.get(userId);
+      if (mem?.twoFactorSecret) {
+        user = {
+          id: userId,
+          name: 'Prophet Ebelechukwu Elochukwu',
+          email: 'admin@soldiersofjesuschrist.org',
+          role: 'SUPER_ADMIN',
+          twoFactorSecret: mem.twoFactorSecret,
+          backupCodes: mem.backupCodes
+        };
+      }
+    }
+
+    if (!user || !user.twoFactorSecret) {
+      return res.status(400).json({ error: 'Invalid request or 2FA not enabled.' });
+    }
+
+    const code = token.replace(/\s/g, '');
+    const speakeasy = (await import('speakeasy')).default;
+
+    // Check TOTP code
+    const isValidTotp = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: 'base32',
+      token: code,
+      window: 2
+    });
+
+    let verified = isValidTotp;
+
+    // If TOTP fails, check backup codes
+    if (!verified) {
+      const upperCode = code.toUpperCase();
+      if (user.backupCodes.includes(upperCode)) {
+        const remainingCodes = user.backupCodes.filter((c: string) => c !== upperCode);
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { backupCodes: remainingCodes }
+        });
+        verified = true;
+      }
+    }
+
+    if (!verified) {
+      return res.status(400).json({ error: 'Invalid 2FA code. Please try again.' });
+    }
+
+    const safeUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      avatarUrl: user.avatarUrl
+    };
+
+    const jwtToken = generateToken(safeUser);
+
+    return res.json({
+      message: 'Login successful',
+      token: jwtToken,
+      user: safeUser
+    });
+  } catch (error: any) {
+    console.error('Complete 2FA login error:', error);
+    return res.status(500).json({ error: 'Failed to complete 2FA login.' });
   }
 });
 

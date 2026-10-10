@@ -16,14 +16,16 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String   // Hashed password
-  role      Role     @default(EDITOR)
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  password        String   // Hashed password
+  role            Role     @default(EDITOR)
+  avatarUrl       String?
+  twoFactorSecret String?
+  backupCodes     String[] @default([])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 enum EventCategory {
@@ -135,15 +137,17 @@ enum DonationStatus {
 }
 
 model Donation {
-  id        String         @id @default(cuid())
-  donorName String
-  email     String
-  amount    Float
-  frequency Frequency      @default(ONE_TIME)
-  fund      String         @default("General Fund")
-  status    DonationStatus @default(Completed)
-  stripeTxId String?
-  createdAt DateTime       @default(now())
+  id             String         @id @default(cuid())
+  donorName      String?
+  email          String?
+  amount         Float
+  frequency      Frequency      @default(ONE_TIME)
+  fund           String         @default("General Fund")
+  status         DonationStatus @default(Completed)
+  stripeTxId     String?
+  customerId     String?
+  subscriptionId String?
+  createdAt      DateTime       @default(now())
 }
 
 model SiteContent {
@@ -159,4 +163,13 @@ model SiteContent {
   phone              String
   email              String
   updatedAt          DateTime @updatedAt
+}
+
+model LiveStream {
+  id         String   @id @default("singleton")
+  title      String   @default("Sunday Worship Service - Live")
+  streamKey  String?
+  playbackId String?
+  isLive     Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
 }

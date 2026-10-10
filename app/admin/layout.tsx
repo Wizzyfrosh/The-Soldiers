@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row w-full">
+    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row w-full overflow-x-hidden">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
@@ -109,8 +109,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      {/* 1. Main Content Body: MUST use flex-1 min-w-0 ml-0 md:ml-64 w-full without overflow-x-auto */}
-      <div className="flex-1 min-w-0 ml-0 md:ml-64 flex flex-col min-h-screen w-full">
+      {/* Main Content Body */}
+      <div className="flex-1 flex flex-col ml-0 md:ml-64 min-w-0 w-full">
         {/* Top Header Bar */}
         <header className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm w-full">
           <div className="flex items-center gap-3">
@@ -134,7 +134,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Main Viewport Container */}
-        <main className="p-4 sm:p-6 lg:p-8 flex-1 w-full max-w-7xl mx-auto">
+        <main className="p-4 md:p-8 flex-1 w-full max-w-full overflow-x-hidden">
           {children}
         </main>
       </div>

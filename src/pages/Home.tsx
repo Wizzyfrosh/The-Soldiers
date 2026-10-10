@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Calendar, MapPin, ArrowRight, Shield, Heart, Sparkles, Users, Lightbulb, Palette, Music, Zap, HandHeart, Baby, UserCheck, Flame } from 'lucide-react';
+import { Play, Calendar, MapPin, ArrowRight, Shield, Heart, Sparkles, Users, Lightbulb, Palette, Music, Zap, HandHeart, Baby, UserCheck, Flame, X, Radio } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '../components/common/Button';
 import { SectionHeader } from '../components/common/SectionHeader';
@@ -11,6 +11,7 @@ import { EventCountdown } from '../components/home/EventCountdown';
 import { TestimoniesSection } from '../components/home/TestimoniesSection';
 import { LatestNewsSection } from '../components/home/LatestNewsSection';
 import { store } from '../data/store';
+import { api } from '../services/api';
 import { ChurchEvent, Sermon, Testimony, NewsItem, CountdownEvent } from '../types';
 
 interface HomeProps {
@@ -31,7 +32,18 @@ export const Home: React.FC<HomeProps> = ({
   const [testimonies, setTestimonies] = useState<Testimony[]>(store.getTestimonies());
   const [newsItems, setNewsItems] = useState<NewsItem[]>(store.getNews());
   const [isLoadingEvents, setIsLoadingEvents] = useState<boolean>(events.length === 0);
+  const [liveStream, setLiveStream] = useState<{ isLive: boolean; title?: string } | null>(null);
+  const [liveDismissed, setLiveDismissed] = useState<boolean>(false);
   const siteContent = store.getSiteContent();
+
+  // Fetch live stream status on mount
+  useEffect(() => {
+    api.livestream.getPublic().then((res) => {
+      if (res?.stream?.isLive) {
+        setLiveStream(res.stream);
+      }
+    }).catch(() => {});
+  }, []);
 
   // Subscribe to store updates for real-time reactivity and sync with backend
   useEffect(() => {
@@ -81,6 +93,40 @@ export const Home: React.FC<HomeProps> = ({
   return (
     <div className="w-full overflow-hidden bg-slate-50">
       
+      {/* DISMISSIBLE LIVE STREAM NOTIFICATION BANNER */}
+      {liveStream?.isLive && !liveDismissed && (
+        <aside aria-label="Live Stream Announcement" className="relative z-40 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white px-4 py-2.5 shadow-lg border-b border-red-500/30">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-black bg-white text-red-600 uppercase tracking-widest shrink-0 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-red-600 inline-block animate-ping"></span>
+                LIVE NOW
+              </span>
+              <p className="text-sm font-semibold truncate">
+                {liveStream.title || 'Sunday Worship Service'} — Streaming live right now!
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Link
+                to="/watch-live"
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-white text-red-600 font-bold text-xs rounded-full hover:bg-gold-400 hover:text-navy-950 transition-colors shadow-sm"
+              >
+                <Radio className="w-3.5 h-3.5" />
+                Watch Stream
+              </Link>
+              <button
+                onClick={() => setLiveDismissed(true)}
+                className="p-1 text-white/80 hover:text-white rounded-full hover:bg-black/10 transition-colors"
+                title="Dismiss banner"
+                aria-label="Dismiss banner"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </aside>
+      )}
+
       {/* SECTION 2: HERO SLIDESHOW WITH DYNAMIC SCROLL ANIMATIONS */}
       <HeroSlideshow
         onOpenPlanVisitModal={onOpenPlanVisitModal}

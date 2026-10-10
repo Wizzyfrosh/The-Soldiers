@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cross, Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
+import { Cross, Lock, Mail, ArrowRight, AlertCircle, ShieldCheck, KeyRound } from 'lucide-react';
 import { api } from '../../services/api';
 import { store } from '../../data/store';
 
@@ -10,6 +10,12 @@ export const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // 2FA State
+  const [requires2FA, setRequires2FA] = useState(false);
+  const [twoFACode, setTwoFACode] = useState('');
+  const [pendingUserId, setPendingUserId] = useState<string | null>(null);
+  const [pendingUserName, setPendingUserName] = useState<string>('');
 
   // If already authenticated, redirect to /admin/dashboard immediately
   React.useEffect(() => {
@@ -29,6 +35,16 @@ export const AdminLogin: React.FC = () => {
 
     try {
       const res = await api.auth.login(email, password);
+
+      // Check if 2FA is required
+      if ((res as any).requires2FA) {
+        setPendingUserId((res as any).userId);
+        setPendingUserName((res as any).userName || '');
+        setRequires2FA(true);
+        setLoading(false);
+        return;
+      }
+
       store.setCurrentUser(res.user);
       navigate('/admin/dashboard');
     } catch (err: any) {
@@ -52,6 +68,31 @@ export const AdminLogin: React.FC = () => {
     }
   };
 
+  const handle2FASubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pendingUserId || !twoFACode.trim()) return;
+
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await api.twoFactor.complete2FA(pendingUserId, twoFACode.trim());
+      store.setCurrentUser(res.user);
+      navigate('/admin/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Invalid 2FA code. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBackToLogin = () => {
+    setRequires2FA(false);
+    setPendingUserId(null);
+    setPendingUserName('');
+    setTwoFACode('');
+    setError(null);
+  };
 
   return (
     <div className="min-h-screen bg-navy-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -62,14 +103,16 @@ export const AdminLogin: React.FC = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center">
           <div className="w-14 h-14 rounded-2xl bg-gold-500 flex items-center justify-center text-navy-950 shadow-gold">
-            <Cross className="w-8 h-8 stroke-[2.5]" />
+            {requires2FA ? <ShieldCheck className="w-8 h-8 stroke-[2.5]" /> : <Cross className="w-8 h-8 stroke-[2.5]" />}
           </div>
         </div>
         <h2 className="mt-5 text-center text-2xl sm:text-3xl font-black uppercase font-display tracking-tight text-white">
-          SJC Leadership Hub
+          {requires2FA ? '2FA Verification' : 'SJC Leadership Hub'}
         </h2>
         <p className="mt-2 text-center text-xs sm:text-sm text-slate-400 font-medium">
-          Authorized personnel only. Equipping the saints for the Kingdom battle.
+          {requires2FA
+            ? `Welcome back, ${pendingUserName}. Enter your authenticator code.`
+            : 'Authorized personnel only. Equipping the saints for the Kingdom battle.'}
         </p>
       </div>
 
@@ -85,62 +128,117 @@ export const AdminLogin: React.FC = () => {
             </div>
           )}
 
-          <form className="space-y-5" onSubmit={handleSubmit} autoComplete="off">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                Admin Email Address
-              </label>
-              <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                  <Mail className="h-4 w-4" />
+          {!requires2FA ? (
+            /* ── Standard Login Form ── */
+            <form className="space-y-5" onSubmit={handleSubmit} autoComplete="off">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                  Admin Email Address
+                </label>
+                <div className="relative rounded-xl shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <input
+                    type="email"
+                    required
+                    autoComplete="off"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full pl-10 pr-4 py-3 bg-navy-950 border border-navy-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm transition-all"
+                    placeholder="Enter your email address"
+                  />
                 </div>
-                <input
-                  type="email"
-                  required
-                  autoComplete="off"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-3 bg-navy-950 border border-navy-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm transition-all"
-                  placeholder="Enter your email address"
-                />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                Password
-              </label>
-              <div className="relative rounded-xl shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                  <Lock className="h-4 w-4" />
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                  Password
+                </label>
+                <div className="relative rounded-xl shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    <Lock className="h-4 w-4" />
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full pl-10 pr-4 py-3 bg-navy-950 border border-navy-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm transition-all"
+                    placeholder="••••••••"
+                  />
                 </div>
-                <input
-                  type="password"
-                  required
-                  autoComplete="new-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-4 py-3 bg-navy-950 border border-navy-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm transition-all"
-                  placeholder="••••••••"
-                />
               </div>
-            </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl text-sm font-extrabold uppercase tracking-wider text-navy-950 bg-gold-500 hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 shadow-gold transition-all disabled:opacity-50 cursor-pointer"
-            >
-              {loading ? (
-                <span>Verifying Credentials...</span>
-              ) : (
-                <>
-                  <span>Sign In to Admin Hub</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl text-sm font-extrabold uppercase tracking-wider text-navy-950 bg-gold-500 hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 shadow-gold transition-all disabled:opacity-50 cursor-pointer"
+              >
+                {loading ? (
+                  <span>Verifying Credentials...</span>
+                ) : (
+                  <>
+                    <span>Sign In to Admin Hub</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+          ) : (
+            /* ── 2FA Verification Form ── */
+            <form className="space-y-5" onSubmit={handle2FASubmit}>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                  Authenticator Code
+                </label>
+                <div className="relative rounded-xl shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    <KeyRound className="h-4 w-4" />
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    autoComplete="one-time-code"
+                    inputMode="numeric"
+                    maxLength={8}
+                    value={twoFACode}
+                    onChange={(e) => setTwoFACode(e.target.value.replace(/[^0-9A-Za-z]/g, ''))}
+                    className="block w-full pl-10 pr-4 py-3 bg-navy-950 border border-navy-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm tracking-[0.4em] text-center font-mono transition-all"
+                    placeholder="000 000"
+                    autoFocus
+                  />
+                </div>
+                <p className="mt-2 text-[11px] text-slate-500">
+                  Enter the 6-digit code from your authenticator app, or a backup code.
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading || twoFACode.length < 6}
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl text-sm font-extrabold uppercase tracking-wider text-navy-950 bg-gold-500 hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 shadow-gold transition-all disabled:opacity-50 cursor-pointer"
+              >
+                {loading ? (
+                  <span>Verifying Code...</span>
+                ) : (
+                  <>
+                    <ShieldCheck className="w-4 h-4" />
+                    <span>Verify & Sign In</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleBackToLogin}
+                className="w-full text-center text-xs text-slate-400 hover:text-gold-400 transition-colors font-bold uppercase cursor-pointer"
+              >
+                ← Back to Login
+              </button>
+            </form>
+          )}
 
         </div>
       </div>

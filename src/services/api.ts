@@ -321,5 +321,58 @@ export const api = {
         method: 'DELETE'
       });
     }
+  },
+
+  // Two-Factor Authentication
+  twoFactor: {
+    getStatus: async () => {
+      return request<{ enabled: boolean; backupCodesCount: number }>('/2fa/status');
+    },
+    setup: async () => {
+      return request<{ message: string; secret: string; qrCode: string; otpauthUrl: string }>('/2fa/setup', {
+        method: 'POST'
+      });
+    },
+    verifySetup: async (secret: string, token: string) => {
+      return request<{ message: string; backupCodes: string[] }>('/2fa/verify-setup', {
+        method: 'POST',
+        body: JSON.stringify({ secret, token })
+      });
+    },
+    disable: async (token: string) => {
+      return request<{ message: string }>('/2fa/disable', {
+        method: 'POST',
+        body: JSON.stringify({ token })
+      });
+    },
+    complete2FA: async (userId: string, token: string) => {
+      const res = await request<{ message: string; token: string; user: any }>('/auth/complete-2fa', {
+        method: 'POST',
+        body: JSON.stringify({ userId, token })
+      });
+      setAuthToken(res.token);
+      return res;
+    }
+  },
+
+  // Live Stream
+  livestream: {
+    getPublic: async () => {
+      return request<{ stream: { title: string; playbackId: string | null; isLive: boolean } }>('/livestream');
+    },
+    getAdmin: async () => {
+      return request<{ stream: { id: string; title: string; streamKey: string | null; playbackId: string | null; isLive: boolean } }>('/livestream/admin');
+    },
+    update: async (data: { title?: string; streamKey?: string; playbackId?: string; isLive?: boolean }) => {
+      return request<{ message: string; stream: any }>('/livestream/admin', {
+        method: 'PUT',
+        body: JSON.stringify(data)
+      });
+    },
+    toggle: async () => {
+      return request<{ message: string; stream: any }>('/livestream/toggle', {
+        method: 'POST'
+      });
+    }
   }
 };

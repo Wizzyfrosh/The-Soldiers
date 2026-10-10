@@ -13,6 +13,8 @@ import { statsRouter } from './routes/stats.js';
 import { uploadRouter } from './routes/upload.js';
 import { newsRouter } from './routes/news.js';
 import { testimoniesRouter } from './routes/testimonies.js';
+import { twoFactorRouter } from './routes/two-factor.js';
+import { liveStreamRouter } from './routes/livestream.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -65,6 +67,8 @@ app.use('/api/admin/stats', statsRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/news', newsRouter);
 app.use('/api/testimonies', testimoniesRouter);
+app.use('/api/2fa', twoFactorRouter);
+app.use('/api/livestream', liveStreamRouter);
 
 // 404 for unhandled API routes
 app.use((req, res, next) => {

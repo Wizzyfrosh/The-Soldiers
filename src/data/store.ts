@@ -566,10 +566,14 @@ class DataStore {
         this.notify();
         return res.article;
       }
-    } catch (err) {
-      console.warn('Failed to save news to backend:', err);
+      return newArticle;
+    } catch (err: any) {
+      console.error('Failed to save news to backend:', err);
+      this.news = this.news.filter(n => n.id !== tempId);
+      this.save('sjc_news', this.news);
+      this.notify();
+      throw err;
     }
-    return newArticle;
   }
 
   async deleteNews(id: string) {

@@ -35,6 +35,7 @@ import { TermsOfService } from './pages/TermsOfService';
 import { NewsDetail } from './pages/NewsDetail';
 import { TestimonyDetail } from './pages/TestimonyDetail';
 import { NotFound } from './pages/NotFound';
+import { WatchLive } from './pages/WatchLive';
 
 // Admin Hub
 import { AdminLayout } from './components/layout/AdminLayout';
@@ -42,12 +43,16 @@ import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminSermons } from './pages/admin/AdminSermons';
 import { AdminEvents } from './pages/admin/AdminEvents';
+import { AdminEventNew } from './pages/admin/AdminEventNew';
+import { AdminEventEdit } from './pages/admin/AdminEventEdit';
 import { AdminGiving } from './pages/admin/AdminGiving';
 import { AdminInbox } from './pages/admin/AdminInbox';
 import { AdminContent } from './pages/admin/AdminContent';
 import { AdminNews } from './pages/admin/AdminNews';
 import { AdminTestimonies } from './pages/admin/AdminTestimonies';
 import { AdminUsers } from './pages/admin/AdminUsers';
+import { AdminSecurity } from './pages/admin/AdminSecurity';
+import { AdminLiveStream } from './pages/admin/AdminLiveStream';
 
 import { ChurchEvent, Sermon } from './types';
 
@@ -119,6 +124,7 @@ export const App: React.FC = () => {
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/testimonies/:id" element={<TestimonyDetail />} />
+          <Route path="/watch-live" element={<WatchLive />} />
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -126,12 +132,16 @@ export const App: React.FC = () => {
           <Route path="/admin/dashboard" element={<AdminLayout><AdminDashboard /></AdminLayout>} />
           <Route path="/admin/sermons" element={<AdminLayout><AdminSermons /></AdminLayout>} />
           <Route path="/admin/events" element={<AdminLayout><AdminEvents /></AdminLayout>} />
+          <Route path="/admin/events/new" element={<AdminLayout><AdminEventNew /></AdminLayout>} />
+          <Route path="/admin/events/:id/edit" element={<AdminLayout><AdminEventEdit /></AdminLayout>} />
           <Route path="/admin/giving" element={<AdminLayout><AdminGiving /></AdminLayout>} />
           <Route path="/admin/inbox" element={<AdminLayout><AdminInbox /></AdminLayout>} />
           <Route path="/admin/content" element={<AdminLayout><AdminContent /></AdminLayout>} />
           <Route path="/admin/users" element={<AdminLayout><AdminUsers /></AdminLayout>} />
           <Route path="/admin/news" element={<AdminLayout><AdminNews /></AdminLayout>} />
           <Route path="/admin/testimonies" element={<AdminLayout><AdminTestimonies /></AdminLayout>} />
+          <Route path="/admin/security" element={<AdminLayout><AdminSecurity /></AdminLayout>} />
+          <Route path="/admin/livestream" element={<AdminLayout><AdminLiveStream /></AdminLayout>} />
 
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />

@@ -18,7 +18,8 @@ import {
   Newspaper,
   MessageSquareQuote,
   Menu,
-  X
+  X,
+  Radio
 } from 'lucide-react';
 import { Role, User } from '../../types';
 import { store } from '../../data/store';
@@ -64,6 +65,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { name: 'CMS Content', path: '/admin/content', icon: <FileText className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR'] },
     { name: 'Latest News', path: '/admin/news', icon: <Newspaper className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR'] },
     { name: 'Testimonies', path: '/admin/testimonies', icon: <MessageSquareQuote className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'EDITOR'] },
+    { name: 'Live Stream', path: '/admin/livestream', icon: <Radio className="w-5 h-5" />, roles: ['SUPER_ADMIN'] },
+    { name: 'Security & 2FA', path: '/admin/security', icon: <Shield className="w-5 h-5" />, roles: ['SUPER_ADMIN'] },
     { name: 'User Access', path: '/admin/users', icon: <Users className="w-5 h-5" />, roles: ['SUPER_ADMIN'] }
   ];
 
@@ -159,7 +162,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     );
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-100 flex flex-col md:flex-row w-full overflow-x-hidden">
       
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
@@ -181,11 +184,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         {sidebarContent}
       </aside>
 
-      {/* Main Content Body */}
+      {/* Main Content Body: flex-1 min-w-0 ml-0 md:ml-64 w-full without overflow-x-auto */}
       <div className="flex-1 min-w-0 ml-0 md:ml-64 flex flex-col min-h-screen w-full">
         
         {/* Top Header Bar */}
-        <header className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+        <header className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between sticky top-0 z-20 shadow-sm w-full">
           <div className="flex items-center gap-3">
             {/* Hamburger button — visible only on mobile */}
             <button
@@ -223,7 +226,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         </header>
 
         {/* Content View */}
-        <main className="p-4 sm:p-6 lg:p-8 flex-1 w-full max-w-7xl mx-auto">
+        <main className="p-4 sm:p-6 lg:p-8 flex-1 w-full max-w-7xl mx-auto min-w-0">
           {children}
         </main>
 
