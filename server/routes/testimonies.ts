@@ -43,23 +43,25 @@ testimoniesRouter.post('/', async (req, res) => {
   try {
     const { title, content, image, name } = req.body;
 
-    if (!title || !content || !image) {
-      return res.status(400).json({ error: 'Title, content, and image are required.' });
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Title and content are required.' });
     }
+
+    const defaultImage = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400';
 
     const testimony = await prisma.testimony.create({
       data: {
         title,
         content,
-        image,
-        name: name || undefined
+        image: image || defaultImage,
+        name: name || null
       }
     });
 
     return res.status(201).json({ message: 'Testimony published successfully.', testimony });
   } catch (error: any) {
     console.error('Create testimony error:', error);
-    return res.status(500).json({ error: 'Failed to publish testimony.' });
+    return res.status(500).json({ error: error.message || 'Failed to publish testimony.' });
   }
 });
 

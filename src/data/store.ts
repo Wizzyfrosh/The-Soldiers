@@ -606,10 +606,14 @@ class DataStore {
         this.notify();
         return res.testimony;
       }
-    } catch (err) {
-      console.warn('Failed to save testimony to backend:', err);
+      return newTestimony;
+    } catch (err: any) {
+      console.error('Failed to save testimony to backend:', err);
+      this.testimonies = this.testimonies.filter(t => t.id !== tempId);
+      this.save('sjc_testimonies', this.testimonies);
+      this.notify();
+      throw err;
     }
-    return newTestimony;
   }
 
   async deleteTestimony(id: string) {
