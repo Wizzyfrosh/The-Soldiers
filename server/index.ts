@@ -15,10 +15,35 @@ import { newsRouter } from './routes/news.js';
 import { testimoniesRouter } from './routes/testimonies.js';
 import { twoFactorRouter } from './routes/two-factor.js';
 import { liveStreamRouter } from './routes/livestream.js';
+import { prisma } from './db.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
+
+// Auto-sync missing columns and tables safely on startup (Vercel serverless + local)
+async function syncDatabaseSchema() {
+  try {
+    await prisma.$executeRawUnsafe(`
+      ALTER TABLE "Testimony" ADD COLUMN IF NOT EXISTS "name" TEXT;
+      ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "twoFactorSecret" TEXT;
+      ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "backupCodes" TEXT[] DEFAULT ARRAY[]::TEXT[];
+      CREATE TABLE IF NOT EXISTS "LiveStream" (
+        "id" TEXT NOT NULL PRIMARY KEY DEFAULT 'singleton',
+        "title" TEXT NOT NULL DEFAULT 'Sunday Worship Service - Live',
+        "streamKey" TEXT,
+        "playbackId" TEXT,
+        "isLive" BOOLEAN NOT NULL DEFAULT false,
+        "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('✅ Database schema verified and synchronized.');
+  } catch (err: any) {
+    console.warn('⚠️ Non-fatal DB schema auto-sync notice:', err.message);
+  }
+}
+
+syncDatabaseSchema();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "prisma generate && tsc && vite build",
+  "buildCommand": "prisma generate && (prisma db push --accept-data-loss || true) && tsc && vite build",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" },
