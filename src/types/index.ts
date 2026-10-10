@@ -47,11 +47,16 @@ export interface EventRegistration {
   registeredAt: string;
 }
 
+export type EventStatus = 'PUBLISHED' | 'DRAFT' | 'CANCELLED';
+
 export interface ChurchEvent {
   id: string;
   title: string;
   description: string;
   date: string;
+  startDate?: string;
+  endDate?: string;
+  status?: EventStatus;
   time: string;
   location: string;
   image?: string | null;

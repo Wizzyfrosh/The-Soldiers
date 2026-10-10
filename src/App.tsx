@@ -25,6 +25,7 @@ import { ChildrenMinistry } from './pages/ChildrenMinistry';
 import { OutreachMinistry } from './pages/OutreachMinistry';
 import { Sermons } from './pages/Sermons';
 import { Events } from './pages/Events';
+import { EventDetail } from './pages/EventDetail';
 import { Give } from './pages/Give';
 import { Contact } from './pages/Contact';
 import { PrayerRequest } from './pages/PrayerRequest';
@@ -109,6 +110,7 @@ export const App: React.FC = () => {
           <Route path="/ministries/outreach" element={<OutreachMinistry />} />
           <Route path="/sermons" element={<Sermons onSelectSermon={(s) => setSelectedSermon(s)} />} />
           <Route path="/events" element={<Events onSelectEvent={(ev) => setSelectedEvent(ev)} />} />
+          <Route path="/events/:id" element={<EventDetail onSelectEvent={(ev) => setSelectedEvent(ev)} />} />
           <Route path="/give" element={<Give onOpenGiveModal={() => setIsGiveOpen(true)} />} />
           <Route path="/contact" element={<Contact onSuccess={(msg) => showToast('Message Received', msg)} />} />
           <Route path="/prayer" element={<PrayerRequest onSuccess={(msg) => showToast('Prayer Received', msg)} />} />

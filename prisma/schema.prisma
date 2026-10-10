@@ -35,11 +35,20 @@ enum EventCategory {
   Conference
 }
 
+enum EventStatus {
+  PUBLISHED
+  DRAFT
+  CANCELLED
+}
+
 model Event {
   id                   String              @id @default(cuid())
   title                String
   description          String              @db.Text
   date                 String
+  startDate            DateTime            @default(now())
+  endDate              DateTime            @default(now())
+  status               EventStatus         @default(PUBLISHED)
   time                 String
   location             String
   image                String?

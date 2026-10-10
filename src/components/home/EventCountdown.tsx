@@ -398,6 +398,17 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
           </div>
         )}
 
+        {/* Subtle View Past Events Archive Link */}
+        <div className="mt-6 pt-4 border-t border-white/10 text-center">
+          <Link
+            to="/events?tab=past"
+            className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-400 hover:text-gold-400 transition-colors"
+          >
+            <span>View Past Events Archive</span>
+            <ArrowRight className="w-3.5 h-3.5 text-gold-400" />
+          </Link>
+        </div>
+
       </div>
     </motion.div>
   );

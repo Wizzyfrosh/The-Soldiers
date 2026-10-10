@@ -460,10 +460,15 @@ export const Home: React.FC<HomeProps> = ({
         <WaveDivider fillColor="#ffffff" />
       </div>
 
-      {/* SECTION 7: UPCOMING EVENT HERO CARD — Redesigned after uploaded image with dynamic events */}
+      {/* SECTION 7: UPCOMING EVENT HERO CARD — Only show upcoming events */}
       <section className="bg-slate-50 py-16">
         <EventCountdown
-          events={events}
+          events={events.filter((ev) => {
+            if (ev.status === 'DRAFT') return false;
+            const now = new Date();
+            const end = ev.endDate ? new Date(ev.endDate) : (ev.startDate ? new Date(ev.startDate) : new Date(ev.date));
+            return isNaN(end.getTime()) || end >= now;
+          })}
           onSelectEvent={onSelectEvent}
           isLoading={isLoadingEvents && events.length === 0}
         />

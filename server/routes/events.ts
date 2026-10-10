@@ -4,15 +4,45 @@ import { authenticateToken, requireRole } from '../middleware/auth.js';
 
 export const eventsRouter = Router();
 
-// GET /api/events (Public)
+// GET /api/events (Public & Admin filtering)
 eventsRouter.get('/', async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, search, tab = 'upcoming', all, status } = req.query;
 
+    const now = new Date();
     const where: any = {};
+
+    // 1. Admin mode vs Public mode
+    if (all === 'true') {
+      // Admin requests all events with optional status filter
+      if (status && typeof status === 'string' && status !== 'ALL') {
+        if (status === 'UPCOMING') {
+          where.endDate = { gte: now };
+          where.status = { not: 'DRAFT' };
+        } else if (status === 'PAST') {
+          where.endDate = { lt: now };
+          where.status = { not: 'DRAFT' };
+        } else {
+          where.status = status;
+        }
+      }
+    } else {
+      // Public mode: only show PUBLISHED events
+      where.status = 'PUBLISHED';
+
+      if (tab === 'past') {
+        // Past query: status: PUBLISHED, endDate < now
+        where.endDate = { lt: now };
+      } else {
+        // Upcoming query: status: PUBLISHED, endDate >= now
+        where.endDate = { gte: now };
+      }
+    }
+
     if (category && typeof category === 'string' && category !== 'All') {
       where.category = category;
     }
+
     if (search && typeof search === 'string') {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
@@ -21,9 +51,13 @@ eventsRouter.get('/', async (req, res) => {
       ];
     }
 
+    const orderBy = (tab === 'past' && all !== 'true') ? { endDate: 'desc' as const } : { startDate: 'asc' as const };
+    const take = (tab === 'past' && all !== 'true') ? 50 : undefined;
+
     const events = await prisma.event.findMany({
       where,
-      orderBy: { date: 'asc' }
+      orderBy,
+      take
     });
 
     return res.json({ events });
@@ -50,7 +84,8 @@ eventsRouter.get('/:id', async (req, res) => {
       }
     });
 
-    if (!event) {
+    // Return 404 only for events that don't exist or have status === "DRAFT"
+    if (!event || event.status === 'DRAFT') {
       return res.status(404).json({ error: 'Event not found.' });
     }
 
@@ -64,17 +99,23 @@ eventsRouter.get('/:id', async (req, res) => {
 // POST /api/events (Admin)
 eventsRouter.post('/', authenticateToken, requireRole(['SUPER_ADMIN', 'EDITOR']), async (req, res) => {
   try {
-    const { title, description, date, time, location, image, category, registrationRequired, capacity } = req.body;
+    const { title, description, date, startDate, endDate, status, time, location, image, category, registrationRequired, capacity } = req.body;
 
     if (!title || !description || !date || !time || !location) {
       return res.status(400).json({ error: 'Missing required event fields.' });
     }
+
+    const parsedStartDate = startDate ? new Date(startDate) : new Date(date);
+    const parsedEndDate = endDate ? new Date(endDate) : new Date(parsedStartDate.getTime() + 2 * 60 * 60 * 1000);
 
     const event = await prisma.event.create({
       data: {
         title,
         description,
         date,
+        startDate: isNaN(parsedStartDate.getTime()) ? new Date() : parsedStartDate,
+        endDate: isNaN(parsedEndDate.getTime()) ? new Date(Date.now() + 2 * 60 * 60 * 1000) : parsedEndDate,
+        status: status || 'PUBLISHED',
         time,
         location,
         image: image || null,
@@ -95,7 +136,7 @@ eventsRouter.post('/', authenticateToken, requireRole(['SUPER_ADMIN', 'EDITOR'])
 // PUT /api/events/:id (Admin)
 eventsRouter.put('/:id', authenticateToken, requireRole(['SUPER_ADMIN', 'EDITOR']), async (req, res) => {
   try {
-    const { title, description, date, time, location, image, category, registrationRequired, capacity } = req.body;
+    const { title, description, date, startDate, endDate, status, time, location, image, category, registrationRequired, capacity } = req.body;
 
     const event = await prisma.event.update({
       where: { id: req.params.id },
@@ -103,6 +144,9 @@ eventsRouter.put('/:id', authenticateToken, requireRole(['SUPER_ADMIN', 'EDITOR'
         ...(title && { title }),
         ...(description && { description }),
         ...(date && { date }),
+        ...(startDate && { startDate: new Date(startDate) }),
+        ...(endDate && { endDate: new Date(endDate) }),
+        ...(status && { status }),
         ...(time && { time }),
         ...(location && { location }),
         ...(image && { image }),
